@@ -14,9 +14,11 @@ RECEPTORFASTA=$DATADIR/$RECEPTORID'.fasta'
 PEPTIDELENGTH=11
 ###Peptide centre of mass###
 PEPTIDE_CM=$DATADIR/1ssc_CM.npy
-####Get Receptor MSA####
+#NUMBER OF ITERATIONS
+NITER=300
 
-####Create MSA with HHblits####
+
+#########Step1: Create MSA with HHblits#########
 SINGIMG=$BASE/src/AF2/AF_environment.sif #Sing img
 HHBLITSDB=$BASE/data/uniclust30_2018_08/uniclust30_2018_08
 #Write individual fasta files for all unique sequences
@@ -24,37 +26,27 @@ hhblits -i $RECEPTORFASTA -d $HHBLITSDB -E 0.001 -all -n 2 -oa3m $DATADIR/$RECEP
 #MSA
 MSA=$DATADIR/$RECEPTORID'.a3m'
 
+
+#########Step2: Design binder#########
 ##### AF2 CONFIGURATION #####
-AFHOME='./'
-
-#Singularity image
-IMG=/home/pbryant/singularity_ims/af_torch_sbox
-
-### path of param folder containing AF2 Neural Net parameters.
-### download from: https://storage.googleapis.com/alphafold/alphafold_params_2021-07-14.tar)
-PARAM=/home/pbryant/data/af_params/
-### Path where AF2 generates its output folder structure
-OUTFOLDER='../data/test/'
-
-### Running options for obtaining a refines tructure ###
+PARAM=$BASE'/src/AF2/'
+PRESET='full_dbs' #Choose preset model configuration - no ensembling (full_dbs) and (reduced_dbs) or 8 model ensemblings (casp14).
 MAX_RECYCLES=8 #max_recycles (default=3)
 MODEL_NAME='model_1' #model_1_ptm
 MSAS="$MSA" #Comma separated list of msa paths
 
-#NUMBER OF ITERATIONS
-NITER=1000
 
 #Regarding the run mode
 SINGULARITY=/opt/singularity3/bin/singularity
 $SINGULARITY exec --nv $IMG \
-python3 $AFHOME/mc_design.py \
+python3 $BASE/src/mc_design.py \
 		--receptor_fasta_path=$RECEPTORFASTA \
 		--receptor_if_residues=$RECEPTORIFRES \
 		--receptor_CAs=$RECEPTOR_CAS \
 		--peptide_length=$PEPTIDELENGTH \
 		--peptide_CM=$PEPTIDE_CM \
 		--msas=$MSAS \
-		--output_dir=$OUTFOLDER \
+		--output_dir=$DATADIR \
 		--model_names=$MODEL_NAME \
 	  --data_dir=$PARAM \
 		--max_recycles=$MAX_RECYCLES \
