@@ -27,3 +27,17 @@ Then do
 bash setup.sh
 ```
 This script fetches the [AlphaFold2 parameters](https://storage.googleapis.com/alphafold/alphafold_params_2021-07-14.tar), installs the singularity image and downloads [uniclust30_2018_08](http://wwwuser.gwdg.de/~compbiol/uniclust/2018_08/uniclust30_2018_08_hhsuite.tar.gz) which is used to generate the receptor MSA.
+
+# Design binders
+To design binders the following needs to be specified: \
+**Target residues** \
+**Receptor CAs** \
+**Receptor fasta sequence** \
+**Peptide lengt** \
+**Peptide centre of mass** \
+
+A test case is provided in **design_local.sh**. \
+This script can be run by simply doing:
+```
+bash design_local.sh
+```
