@@ -22,7 +22,11 @@ NITER=300
 SINGIMG=$BASE/src/AF2/AF_environment.sif #Sing img
 HHBLITSDB=$BASE/data/uniclust30_2018_08/uniclust30_2018_08
 #Write individual fasta files for all unique sequences
-hhblits -i $RECEPTORFASTA -d $HHBLITSDB -E 0.001 -all -n 2 -oa3m $DATADIR/$RECEPTORID'.a3m'
+if test -f $DATADIR/$RECEPTORID'.a3m'; then
+	echo $DATADIR/$RECEPTORID'.a3m' exists
+else
+	hhblits -i $RECEPTORFASTA -d $HHBLITSDB -E 0.001 -all -n 2 -oa3m $DATADIR/$RECEPTORID'.a3m'
+fi
 #MSA
 MSA=$DATADIR/$RECEPTORID'.a3m'
 
@@ -35,8 +39,7 @@ MAX_RECYCLES=8 #max_recycles (default=3)
 MODEL_NAME='model_1' #model_1_ptm
 MSAS="$MSA" #Comma separated list of msa paths
 
-
-#Regarding the run mode
+#Optimise a binder
 SINGULARITY=/opt/singularity3/bin/singularity
 $SINGULARITY exec --nv $IMG \
 python3 $BASE/src/mc_design.py \
