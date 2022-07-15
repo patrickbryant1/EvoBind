@@ -34,7 +34,7 @@ To design binders the following needs to be specified: \
 **Receptor CAs** \
 **Receptor fasta sequence** \
 **Peptide lengt** \
-**Peptide centre of mass** \
+**Peptide centre of mass relative to the receptor CAs** 
 
 A test case is provided in **design_local.sh**. \
 This script can be run by simply doing:
