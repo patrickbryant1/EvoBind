@@ -141,7 +141,7 @@ def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
 
     #Write COM
     x, y, z = format(COM[0],'.3f'),format(COM[1],'.3f'),format(COM[2],'.3f')
-    COM_repr = ['ATOM      1  CA  ALA C   1      17.550  25.557  -1.235   1.0 23.13           C']
+    COM_repr = 'ATOM      1  CA  ALA C   1      17.550  25.557  -1.235   1.0 23.13           C'
     record = parse_atm_record(COM_repr)
     line = format_line(str(record['atm_no']), record['atm_name'], record['res_name'], chain_name, str(record['res_no']),
     x,y,z, str(record['occ']), str(record['B']), record['atm_name'][0])
