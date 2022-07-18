@@ -77,7 +77,7 @@ def read_pdb(pdbname):
         cat_model[key] = np.array(cat_model[key])
         cat_model_CA_coords[key] = np.array(cat_model_CA_coords[key])
 
-    return cat_mode, cat_model_CA_coords
+    return cat_model, cat_model_CA_coords
 
 
 
