@@ -74,7 +74,7 @@ def read_pdb(pdbname):
                     line = format_line(str(atm_no), atm_name, res_name, chain.id, str(res_no),
                     x,y,z,str(occ),str(B),atom_id[0])
                     cat_model[chain.id].append(line+'\n')
-                    cat_model_resnos[chain.id].append(resno)
+                    cat_model_resnos[chain.id].append(res_no)
 
     for key in cat_model:
         cat_model[key] = np.array(cat_model[key])
