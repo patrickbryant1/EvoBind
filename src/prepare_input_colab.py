@@ -90,7 +90,7 @@ def write_pdb(data, outname):
         for line in data:
             file.write(line)
 
-def pepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
+def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
     '''Prepare input
     '''
 
