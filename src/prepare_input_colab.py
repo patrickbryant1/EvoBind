@@ -69,7 +69,7 @@ def read_pdb(pdbname):
                     occ = atom.get_occupancy()
                     B = min(100,atom.get_bfactor())
                     #Format line
-                    line = format_line(str(atm_no), atm_name, res_name, chain_name, str(res_no),
+                    line = format_line(str(atm_no), atm_name, res_name, chain.id, str(res_no),
                     x,y,z,str(occ),str(B),atom_id[0])
                     cat_model[chain.id].append(line+'\n')
 
