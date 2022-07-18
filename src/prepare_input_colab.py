@@ -11,6 +11,29 @@ import pdb
 
 
 ##############FUNCTIONS##############
+
+def parse_atm_record(line):
+    '''Get the atm record
+    '''
+    record = defaultdict()
+    record['name'] = line[0:6].strip()
+    record['atm_no'] = int(line[6:11])
+    record['atm_name'] = line[12:16].strip()
+    record['atm_alt'] = line[17]
+    record['res_name'] = line[17:20].strip()
+    record['chain'] = line[21]
+    record['res_no'] = int(line[22:26])
+    record['insert'] = line[26].strip()
+    record['resid'] = line[22:29]
+    record['x'] = float(line[30:38])
+    record['y'] = float(line[38:46])
+    record['z'] = float(line[46:54])
+    record['occ'] = float(line[54:60])
+    record['B'] = float(line[60:66])
+
+    return record
+
+
 def format_line(atm_no, atm_name, res_name, chain, res_no, x,y,z,occ,B,atm_id):
     '''Format the line into PDB
     '''
@@ -85,12 +108,15 @@ def read_pdb(pdbname):
 
 
 
-def write_pdb(data, outname):
+def write_pdb(data, chain_name, outname):
     '''Write PDB
     '''
 
     with open(outname, 'w') as file:
         for line in data:
+            record = parse_atm_record(line)
+            line = format_line(record['atm_no'], record['atm_name'], record['res_name'], chain_name, record['res_no'],
+            record['x'], record['y'], record['z'], record['occ'], record['B'], record['atm_name'][0])
             file.write(line)
 
 def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
@@ -101,7 +127,7 @@ def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
     cat_model, cat_model_resnos, cat_model_CA_coords = read_pdb(pdbname)
     receptor_pdb, receptor_resnos, receptor_CA_coords = cat_model[receptor_chain], cat_model_resnos[receptor_chain], cat_model_CA_coords[receptor_chain]
     #Write receptor for vis
-    write_pdb(receptor_pdb, outdir+'receptor.pdb')
+    write_pdb(receptor_pdb, 'A', outdir+'receptor.pdb')
     #Write the target residues for vis
     target_residue_indices = []
     for i in range(len(receptor_resnos)):
@@ -110,6 +136,6 @@ def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
 
     target_residue_pdb = receptor_pdb[target_residue_indices]
     #Write receptor target residues for vis
-    write_pdb(target_residue_pdb, outdir+'receptor_target_residues.pdb')
+    write_pdb(target_residue_pdb, 'B',outdir+'receptor_target_residues.pdb')
 
     return receptor_CAs
