@@ -148,4 +148,4 @@ def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
     COM_repr = [line+'\n']
     write_pdb(COM_repr, 'C', outdir+'COM.pdb')
 
-    return receptor_CAs_coords
+    return receptor_CA_coords
