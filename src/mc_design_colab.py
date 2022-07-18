@@ -375,19 +375,20 @@ def optimise_binder(
 
 ######################MAIN###########################
 def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs,
-        peptide_length, peptide_CM, output_dir, num_iterations):
+        peptide_length, peptide_CM, output_dir, num_iterations, model_names,
+        max_recycles, datadir):
 
   #Use a single ensemble
   num_ensemble = 1
 
   model_runners = {}
-  for model_name in FLAGS.model_names:
+  for model_name in model_names:
     model_config = config.model_config(model_name)
     model_config.data.eval.num_ensemble = num_ensemble
-    model_config.data.common.num_recycle = FLAGS.max_recycles           ##### NEW!
-    model_config.model.num_recycle = FLAGS.max_recycles                 ##### NEW!
+    model_config.data.common.num_recycle = max_recycles
+    model_config.model.num_recycle = max_recycles
     model_params = data.get_model_haiku_params(
-          model_name=model_name, data_dir=FLAGS.data_dir)
+          model_name=model_name, data_dir=data_dir)
     model_runner = model.RunModel(model_config, model_params)
     model_runners[model_name] = model_runner
 
