@@ -269,10 +269,10 @@ def save_design(unrelaxed_protein, output_dir, model_name, l1):
 def optimise_binder(
     fasta_path: str,
     fasta_name: str,
-    receptor_if_residues: array,
-    receptor_CAs: array,
+    receptor_if_residues: np.array,
+    receptor_CAs: np.array,
     peptide_length: int,
-    peptide_CM: array,
+    peptide_CM: np.array,
     output_dir_base: str,
     data_pipeline: pipeline.DataPipeline,
     random_seed: int,
