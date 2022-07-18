@@ -115,8 +115,9 @@ def write_pdb(data, chain_name, outname):
     with open(outname, 'w') as file:
         for line in data:
             record = parse_atm_record(line)
-            line = format_line(record['atm_no'], record['atm_name'], record['res_name'], chain_name, record['res_no'],
-            record['x'], record['y'], record['z'], record['occ'], record['B'], record['atm_name'][0])
+            x, y, z = format(record['x'],'.3f'),format(record['y'],'.3f'),format(record['z'],'.3f')
+            line = format_line(str(record['atm_no']), record['atm_name'], record['res_name'], chain_name, str(record['res_no']),
+            x,y,z, str(record['occ']), str(record['B']), record['atm_name'][0])
             file.write(line)
 
 def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
