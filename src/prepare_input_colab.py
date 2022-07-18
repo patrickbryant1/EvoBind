@@ -95,7 +95,7 @@ def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
     '''
 
     #Read PDB
-    cat_model, cat_model_CA_coords = read_pdb(pdb_name)
+    cat_model, cat_model_CA_coords = read_pdb(pdbname)
     receptor_pdb, receptor_CA_coords = cat_model[receptor_chain], cat_model_CA_coords[receptor_chain]
     #Write receptor for vis
     write_pdb(receptor_pdb, outdir+'receptor.pdb')
