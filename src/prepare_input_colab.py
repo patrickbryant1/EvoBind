@@ -62,7 +62,6 @@ def read_pdb(pdbname):
                     atm_name = atom.get_name()
                     x,y,z = atom.get_coord()
 
-                    cat_model_coords[chain.id].append(atom.get_coord())
                     if atm_name=='CA':
                         cat_model_CA_coords[chain.id].append(atom.get_coord())
 
