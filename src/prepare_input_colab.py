@@ -38,12 +38,14 @@ def read_pdb(pdbname):
 
     #Save
     cat_model = {}
+    cat_model_resnos = {}
     cat_model_CA_coords = {}
     atm_no=0
     for model in struc:
         for chain in model:
             #Save
             cat_model[chain.id]=[]
+            cat_model_resnos[chain.id]=[]
             cat_model_CA_coords[chain.id]=[]
 
             #Reset res no
@@ -72,12 +74,14 @@ def read_pdb(pdbname):
                     line = format_line(str(atm_no), atm_name, res_name, chain.id, str(res_no),
                     x,y,z,str(occ),str(B),atom_id[0])
                     cat_model[chain.id].append(line+'\n')
+                    cat_model_resnos[chain.id].append(resno)
 
-    for key in cat_model_CA_coords:
+    for key in cat_model:
         cat_model[key] = np.array(cat_model[key])
+        cat_model_resnos[key] = np.array(cat_model_resnos[key])
         cat_model_CA_coords[key] = np.array(cat_model_CA_coords[key])
 
-    return cat_model, cat_model_CA_coords
+    return cat_model, cat_model_resnos, cat_model_CA_coords
 
 
 
@@ -94,13 +98,18 @@ def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
     '''
 
     #Read PDB
-    cat_model, cat_model_CA_coords = read_pdb(pdbname)
-    receptor_pdb, receptor_CA_coords = cat_model[receptor_chain], cat_model_CA_coords[receptor_chain]
+    cat_model, cat_model_resnos, cat_model_CA_coords = read_pdb(pdbname)
+    receptor_pdb, receptor_resnos, receptor_CA_coords = cat_model[receptor_chain], cat_model_resnos[receptor_chain], cat_model_CA_coords[receptor_chain]
     #Write receptor for vis
     write_pdb(receptor_pdb, outdir+'receptor.pdb')
-    pdb.set_trace()
-    #Save
-    np.save(args.pdbdir[0]+args.structure_id[0]+'_CM.npy',R)
+    #Write the target residues for vis
+    target_residue_indices = []
+    for i in range(len(receptor_resnos)):
+        if receptor_resnos[i] in target_residues:
+            target_residue_indices.append(i)
 
-    #Get the receptor CAs
-    np.save(args.pdbdir[0]+args.structure_id[0]+'_receptor_CA.npy', CA_coords[args.receptor_chain[0]])
+    target_residue_pdb = receptor_pdb[target_residue_indices]
+    #Write receptor target residues for vis
+    write_pdb(target_residue_pdb, outdir+'receptor_target_residues.pdb')
+
+    return receptor_CAs
