@@ -277,6 +277,7 @@ def optimise_binder(
     data_pipeline: pipeline.DataPipeline,
     random_seed: int,
     model_runners: Optional[Dict[str, model.RunModel]],
+    msas: list,
     num_iterations: int):
 
   """
@@ -297,7 +298,7 @@ def optimise_binder(
   # Get features.
   feature_dict = data_pipeline.process(
         input_fasta_path=fasta_path,
-        input_msas=FLAGS.msas,
+        input_msas=msas,
         template_search=None,
         msa_output_dir=None)
 
@@ -374,9 +375,8 @@ def optimise_binder(
     save_design(unrelaxed_protein, output_dir_base, str(num_iter), feature_dict['seq_length'][0])
 
 ######################MAIN###########################
-def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs,
-        peptide_length, peptide_CM, output_dir, num_iterations, model_names,
-        max_recycles, datadir):
+def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs, receptor_MSA,
+        peptide_length, peptide_CM, output_dir, num_iterations, model_names, max_recycles, datadir):
 
   #Use a single ensemble
   num_ensemble = 1
@@ -411,4 +411,5 @@ def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs,
         data_pipeline=data_pipeline,
         model_runners=model_runners,
         random_seed=random_seed,
+        msas=[receptor_MSA],
         num_iterations=num_iterations)
