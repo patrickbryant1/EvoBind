@@ -374,14 +374,11 @@ def optimise_binder(
     save_design(unrelaxed_protein, output_dir_base, str(num_iter), feature_dict['seq_length'][0])
 
 ######################MAIN###########################
-def main(receptor_fasta_path):
+def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs,
+        peptide_length, peptide_CM, output_dir, num_iterations):
 
   #Use a single ensemble
   num_ensemble = 1
-
-  # Check for duplicate FASTA file names.
-  fasta_name = pathlib.Path(receptor_fasta_path).stem
-
 
   model_runners = {}
   for model_name in FLAGS.model_names:
@@ -403,8 +400,7 @@ def main(receptor_fasta_path):
   data_pipeline = foldonly.FoldDataPipeline()
 
   # Predict structure for each of the sequences.
-  optimise_binder(
-        fasta_path=receptor_fasta_path,
+  optimise_binder(fasta_path=receptor_fasta_path,
         fasta_name=fasta_name,
         receptor_if_residues=receptor_if_residues,
         receptor_CAs=receptor_CAs,
