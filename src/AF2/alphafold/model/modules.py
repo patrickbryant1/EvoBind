@@ -1730,8 +1730,9 @@ class EmbeddingsAndEvoformer(hk.Module):
                                           True,
                                           name='prev_msa_first_row_norm')(
                                               batch['prev_msa_first_row'])
-        msa_activations = jax.ops.index_add(msa_activations, 0,
-                                            prev_msa_first_row)
+        # msa_activations = jax.ops.index_add(msa_activations, 0,
+        #                                     prev_msa_first_row)
+        msa_activations = msa_activations.at[0].add(prev_msa_first_row)
 
       if 'prev_pair' in batch:
         pair_activations += hk.LayerNorm([-1],
