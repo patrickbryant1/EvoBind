@@ -188,6 +188,48 @@ def to_pdb(prot: Protein) -> str:
   pdb_lines.append('')
   return '\n'.join(pdb_lines)
 
+def get_coords(prot: Protein) -> np.ndarray:
+    '''Get the coordinates of all atoms
+    in the prediction
+    '''
+
+    restypes = residue_constants.restypes + ['X']
+    res_1to3 = lambda r: residue_constants.restype_1to3.get(restypes[r], 'UNK')
+    atom_types = residue_constants.atom_types
+
+    #Save
+    protein_atoms = []
+    protein_resno = []
+    protein_atom_coords = []
+
+    atom_mask = prot.atom_mask
+    aatype = prot.aatype
+    atom_positions = prot.atom_positions
+    residue_index = prot.residue_index.astype(np.int32)
+    b_factors = prot.b_factors
+
+    if np.any(aatype > residue_constants.restype_num):
+      raise ValueError('Invalid aatypes.')
+
+    atom_index = 1
+    chain_id = 'A'
+    # Add all atom sites.
+    for i in range(aatype.shape[0]):
+      for atom_name, pos, mask, b_factor in zip(
+          atom_types, atom_positions[i], atom_mask[i], b_factors[i]):
+        if mask < 0.5:
+          continue
+
+        record_type = 'ATOM'
+        name = atom_name if len(atom_name) == 4 else f' {atom_name}'
+        #Save
+        protein_atoms.append(atom_name[0]) # Protein supports only C, N, O, S, this works.
+        protein_resno.append(residue_index[i])
+        protein_atom_coords.append([pos[0],pos[1],pos[2]])
+
+        atom_index += 1
+
+    return np.array(protein_resno), np.array(protein_atoms), np.array(protein_atom_coords)
 
 def ideal_atom_mask(prot: Protein) -> np.ndarray:
   """Computes an ideal atom mask.
