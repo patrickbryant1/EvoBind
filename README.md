@@ -10,7 +10,7 @@ The AlphaFold2 parameters are made available under the terms of the [CC BY 4.0 l
 \
 **You may not use these files except in compliance with the licenses.**
 \
-EvoBind is also available as a**Colab notebook** here: https://colab.research.google.com/github/patrickbryant1/EvoBind/blob/master/EvoBind.ipynb
+EvoBind is also available as a **Colab notebook** here: https://colab.research.google.com/github/patrickbryant1/EvoBind/blob/master/EvoBind.ipynb
 
 # Computational requirements
 Before beginning the process of setting up this pipeline on your local system, make sure you have adequate computational resources. Make sure you have an **available GPU** as this will speed up the prediction process substantially compared to CPU optimization. EvoBind assumes you have NVIDIA GPUs on your system, readily available. A Linux-based system is assumed.
