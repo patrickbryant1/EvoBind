@@ -71,7 +71,7 @@ def read_pdb(pdbname):
             cat_model[chain.id]=[]
             cat_model_resnos[chain.id]=[]
             cat_model_CA_coords[chain.id]=[]
-            cat_model_seqs[chain.id]=[]
+            cat_model_seqs[chain.id]=''
 
             #Reset res no
             res_no=0
@@ -106,7 +106,6 @@ def read_pdb(pdbname):
         cat_model[key] = np.array(cat_model[key])
         cat_model_resnos[key] = np.array(cat_model_resnos[key])
         cat_model_CA_coords[key] = np.array(cat_model_CA_coords[key])
-        cat_model_seqs[key] = np.array(cat_model_seqs[key])
 
     return cat_model, cat_model_resnos, cat_model_CA_coords, cat_model_seqs
 
