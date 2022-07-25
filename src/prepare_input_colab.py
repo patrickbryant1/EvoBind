@@ -63,6 +63,7 @@ def read_pdb(pdbname):
     cat_model = {}
     cat_model_resnos = {}
     cat_model_CA_coords = {}
+    cat_model_seqs = {}
     atm_no=0
     for model in struc:
         for chain in model:
@@ -70,6 +71,7 @@ def read_pdb(pdbname):
             cat_model[chain.id]=[]
             cat_model_resnos[chain.id]=[]
             cat_model_CA_coords[chain.id]=[]
+            cat_model_seqs[chain.id]=[]
 
             #Reset res no
             res_no=0
@@ -89,6 +91,7 @@ def read_pdb(pdbname):
 
                     if atm_name=='CA':
                         cat_model_CA_coords[chain.id].append(atom.get_coord())
+                        cat_model_seqs[chain.id]+=three_to_one[res_name]
 
                     x, y, z = format(x,'.3f'),format(y,'.3f'),format(z,'.3f')
                     occ = atom.get_occupancy()
@@ -103,8 +106,9 @@ def read_pdb(pdbname):
         cat_model[key] = np.array(cat_model[key])
         cat_model_resnos[key] = np.array(cat_model_resnos[key])
         cat_model_CA_coords[key] = np.array(cat_model_CA_coords[key])
+        cat_model_seqs[key] = np.array(cat_model_seqs[key])
 
-    return cat_model, cat_model_resnos, cat_model_CA_coords
+    return cat_model, cat_model_resnos, cat_model_CA_coords, cat_model_seqs
 
 
 
@@ -125,8 +129,8 @@ def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
     '''
 
     #Read PDB
-    cat_model, cat_model_resnos, cat_model_CA_coords = read_pdb(pdbname)
-    receptor_pdb, receptor_resnos, receptor_CA_coords = cat_model[receptor_chain], cat_model_resnos[receptor_chain], cat_model_CA_coords[receptor_chain]
+    cat_model, cat_model_resnos, cat_model_CA_coords, cat_model_seqs = read_pdb(pdbname)
+    receptor_pdb, receptor_resnos, receptor_CA_coords, receptor_seq = cat_model[receptor_chain], cat_model_resnos[receptor_chain], cat_model_CA_coords[receptor_chain], cat_model_seqs[receptor_chain]
     #Write receptor for vis
     write_pdb(receptor_pdb, 'A', outdir+'receptor.pdb')
     #Write the target residues for vis
@@ -148,4 +152,4 @@ def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
     COM_repr = [line+'\n']
     write_pdb(COM_repr, 'C', outdir+'COM.pdb')
 
-    return receptor_CA_coords
+    return receptor_CA_coords, receptor_seq
