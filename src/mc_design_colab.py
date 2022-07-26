@@ -211,8 +211,8 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
         pred_receptor_CAs.append(np.argwhere(receptor_resno==resno)[1][0])
     for resno in np.unique(peptide_resno):
         pred_peptide_CAs.append(np.argwhere(peptide_resno==resno)[1][0])
-    print('Checking SVDSuperimposer...')
-    print(receptor_CAs, receptor_coords[pred_receptor_CAs])
+    #print('Checking SVDSuperimposer...')
+    #print(receptor_CAs, receptor_coords[pred_receptor_CAs])
     sup.set(receptor_CAs, receptor_coords[pred_receptor_CAs]) #(reference_coords, coords)
     sup.run()
     rot, tran = sup.get_rotran()
