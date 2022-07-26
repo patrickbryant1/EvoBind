@@ -207,10 +207,12 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
 
     #Get the CAs for the receptor and peptide: order N, CA
     pred_receptor_CAs, pred_peptide_CAs = [], []
-    for resno in  np.unique(receptor_resno):
+    for resno in np.unique(receptor_resno):
         pred_receptor_CAs.append(np.argwhere(receptor_resno==resno)[1][0])
-    for resno in  np.unique(peptide_resno):
+    for resno in np.unique(peptide_resno):
         pred_peptide_CAs.append(np.argwhere(peptide_resno==resno)[1][0])
+    print('Checking SVDSuperimposer...')
+    print(receptor_CAs, receptor_coords[pred_receptor_CAs])
     sup.set(receptor_CAs, receptor_coords[pred_receptor_CAs]) #(reference_coords, coords)
     sup.run()
     rot, tran = sup.get_rotran()
