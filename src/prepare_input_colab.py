@@ -6,6 +6,7 @@ import pandas as pd
 import glob
 from collections import defaultdict
 from Bio.PDB.PDBParser import PDBParser
+from Bio.PDB import MMCIFParser
 from Bio.SVDSuperimposer import SVDSuperimposer
 import pdb
 
@@ -56,8 +57,13 @@ def read_pdb(pdbname):
     '''
     three_to_one = {'ARG':'R', 'HIS':'H', 'LYS':'K', 'ASP':'D', 'GLU':'E', 'SER':'S', 'THR':'T', 'ASN':'N', 'GLN':'Q', 'CYS':'C', 'GLY':'G', 'PRO':'P', 'ALA':'A', 'ILE':'I', 'LEU':'L', 'MET':'M', 'PHE':'F', 'TRP':'W', 'TYR':'Y', 'VAL':'V',
     'SEC':'U', 'PYL':'O', 'GLX':'X', 'UNK': 'X'}
-    parser = PDBParser()
-    struc = parser.get_structure('', pdbname)
+
+    if pdbname.endswith('pdb'):
+        parser = PDBParser()
+        struc = parser.get_structure('', pdbname)
+    else:
+        parser = MMCIFParser()
+        struc = parser.get_structure("",pdbname)
 
     #Save
     cat_model = {}
