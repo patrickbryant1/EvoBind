@@ -307,7 +307,7 @@ def optimise_binder(
       seq_weights, peptide_sequence = initialize_weights(peptide_length)
   else:
       peptide_sequence = start_sequence
-      
+
   ####Run the directed evolution####
   sequence_scores = {'if_dist_peptide':[], 'if_dist_receptor':[],'plddt':[], 'delta_CM':[], 'loss':[],'sequence':[]}
 
@@ -328,9 +328,10 @@ def optimise_binder(
       #Get an initial estimate
       if_dist_peptide, if_dist_receptor, plddt, delta_CM, unrelaxed_protein = predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
                                                                                     random_seed, receptor_if_residues, receptor_CAs, peptide_CM)
+      #Save the starting point
+      save_design(unrelaxed_protein, output_dir_base, 'start', feature_dict['seq_length'][0])
 
   #Save
-
   if len(sequence_scores['if_dist_peptide'])<1:
       #Save
       sequence_scores['if_dist_peptide'].append(if_dist_peptide)
