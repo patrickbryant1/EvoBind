@@ -275,7 +275,8 @@ def optimise_binder(
     random_seed: int,
     model_runners: Optional[Dict[str, model.RunModel]],
     msas: list,
-    num_iterations: int):
+    num_iterations: int,
+    start_sequence: str):
 
   """
   1. Initialize an array with rabdomly distributed sequence probabilities: initialize_sequence
@@ -300,12 +301,15 @@ def optimise_binder(
         msa_output_dir=None)
 
 
-  #Initialize weights - these are the amino acid probabilities
-  #Also returns the peptide_sequence corresponding to the weights
-  seq_weights, peptide_sequence = initialize_weights(peptide_length)
+  if len(start_sequence)<1:
+      #Initialize weights - these are the amino acid probabilities
+      #Also returns the peptide_sequence corresponding to the weights
+      seq_weights, peptide_sequence = initialize_weights(peptide_length)
+  else:
+      peptide_sequence = start_sequence
+      
   ####Run the directed evolution####
   sequence_scores = {'if_dist_peptide':[], 'if_dist_receptor':[],'plddt':[], 'delta_CM':[], 'loss':[],'sequence':[]}
-
 
   #Check if a run exists
   if os.path.exists(output_dir_base+'if_dist_peptide.npy'):
@@ -372,8 +376,8 @@ def optimise_binder(
     save_design(unrelaxed_protein, output_dir_base, str(num_iter), feature_dict['seq_length'][0])
 
 ######################MAIN###########################
-def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs, receptor_MSA,
-        peptide_length, peptide_CM, output_dir, num_iterations, model_names, max_recycles, datadir):
+def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs, receptor_MSA, peptide_length,
+        peptide_CM, output_dir, num_iterations, model_names, max_recycles, datadir, start_sequence=''):
 
   #Use a single ensemble
   num_ensemble = 1
@@ -409,4 +413,5 @@ def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs, re
         model_runners=model_runners,
         random_seed=random_seed,
         msas=[receptor_MSA],
-        num_iterations=num_iterations)
+        num_iterations=num_iterations,
+        start_sequence=start_sequence)
