@@ -41,7 +41,7 @@ MSAS="$MSA" #Comma separated list of msa paths
 
 #Optimise a binder
 SINGULARITY=/opt/singularity3/bin/singularity
-$SINGULARITY exec --nv $IMG \
+$SINGULARITY exec --nv $SINGIMG \
 python3 $BASE/src/mc_design.py \
 		--receptor_fasta_path=$RECEPTORFASTA \
 		--receptor_if_residues=$RECEPTORIFRES \
