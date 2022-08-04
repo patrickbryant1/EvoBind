@@ -1,7 +1,10 @@
+#!/bin/bash
 
+# Figure out dir of the script, so we can launch from anywhere
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 #############PARAMETERS#############
-BASE=$(pwd) #Where all scripts are run from, now the current directory
+BASE=$SCRIPT_DIR
 DATADIR=$BASE/data/test
 RECEPTORID=1ssc_receptor
 ###Receptor interface residues
@@ -20,6 +23,8 @@ NITER=300
 
 #########Step1: Create MSA with HHblits#########
 SINGIMG=$BASE/src/AF2/AF_environment.sif #Sing img
+
+# TG - we could also use $SINGIMG's hhblits
 HHBLITSDB=$BASE/data/uniclust30_2018_08/uniclust30_2018_08
 #Write individual fasta files for all unique sequences
 if test -f $DATADIR/$RECEPTORID'.a3m'; then
@@ -41,8 +46,15 @@ MSAS="$MSA" #Comma separated list of msa paths
 
 #Optimise a binder
 SINGULARITY=/opt/singularity3/bin/singularity
-$SINGULARITY exec --nv $SINGIMG \
-python3 $BASE/src/mc_design.py \
+if [ ! -x $SINGULARITY ]; then
+    # Chances are that some HPCs already have it in path
+    SINGULARITY=singularity
+fi
+
+$SINGULARITY exec --nv \
+	     --env PYTHONPATH=$PARAM \
+	     $SINGIMG \
+	        /opt/conda/bin/python3 $BASE/src/mc_design.py \
 		--receptor_fasta_path=$RECEPTORFASTA \
 		--receptor_if_residues=$RECEPTORIFRES \
 		--receptor_CAs=$RECEPTOR_CAS \
@@ -51,7 +63,8 @@ python3 $BASE/src/mc_design.py \
 		--msas=$MSAS \
 		--output_dir=$DATADIR \
 		--model_names=$MODEL_NAME \
-	  --data_dir=$PARAM \
+		--data_dir=$PARAM \
 		--max_recycles=$MAX_RECYCLES \
 		--num_iterations=$NITER \
-		--predict_only=False \
+		--predict_only=False
+
