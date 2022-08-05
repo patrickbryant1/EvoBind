@@ -24,6 +24,10 @@ To setup this pipeline, clone this github repository:
 git clone https://github.com/patrickbryant1/EvoBind.git
 ```
 \
+To install Singularity3 on a Linux system, do
+```
+bash ./src/install_singularity_ubuntu.sh
+```
 Then do
 ```
 bash setup.sh
