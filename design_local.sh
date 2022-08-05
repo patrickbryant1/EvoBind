@@ -43,7 +43,7 @@ MODEL_NAME='model_1' #model_1_ptm
 MSAS="$MSA" #Comma separated list of msa paths
 
 #Optimise a binder
-$SINGULARITY exec --nv $SINGIMG \
+$SINGULARITY exec --nv --bind $BASE:$BASE $SINGIMG \
 python3 $BASE/src/mc_design.py \
 		--receptor_fasta_path=$RECEPTORFASTA \
 		--receptor_if_residues=$RECEPTORIFRES \
