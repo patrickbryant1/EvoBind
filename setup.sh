@@ -12,6 +12,6 @@ singularity pull AF_environment.sif docker://catgumag/alphafold:latest
 
 cd ../../data/
 ### Download uniclust30_2018_08
-wget http://wwwuser.gwdg.de/~compbiol/uniclust/2018_08/uniclust30_2018_08_hhsuite.tar.gz
+wget http://wwwuser.gwdg.de/~compbiol/uniclust/2018_08/uniclust30_2018_08_hhsuite.tar.gz --no-check-certificate
 tar -zxvf uniclust30_2018_08_hhsuite.tar.gz
 rm uniclust30_2018_08_hhsuite.tar.gz
