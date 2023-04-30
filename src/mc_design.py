@@ -22,21 +22,24 @@ import pathlib
 import pickle
 import random
 import sys
+
+sys.path.append("./AF2/")
+
 import time
 from typing import Dict, Optional
 
 from absl import app
 from absl import flags
 from absl import logging
-from AF2.alphafold.common import protein
-from AF2.alphafold.common import residue_constants
-from AF2.alphafold.data import msaonly
-from AF2.alphafold.data import foldonly
-from AF2.alphafold.data import pipeline
-from AF2.alphafold.data import templates
-from AF2.alphafold.model import data
-from AF2.alphafold.model import config
-from AF2.alphafold.model import model
+from alphafold.common import protein
+from alphafold.common import residue_constants
+from alphafold.data import msaonly
+from alphafold.data import foldonly
+from alphafold.data import pipeline
+from alphafold.data import templates
+from alphafold.model import data
+from alphafold.model import config
+from alphafold.model import model
 import numpy as np
 import jax
 from jax import numpy as jnp
