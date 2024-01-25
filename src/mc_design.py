@@ -15,6 +15,7 @@
 """Full AlphaFold protein structure prediction script.
 Modified by Patrick Bryant to include MC search.
 """
+import pdb
 import json
 import os
 import warnings
@@ -23,7 +24,7 @@ import pickle
 import random
 import sys
 
-sys.path.append("./AF2/")
+sys.path.append(os.getcwd()+"/src/AF2/")
 
 import time
 from typing import Dict, Optional
@@ -48,7 +49,8 @@ import copy
 from collections import defaultdict
 from Bio.SVDSuperimposer import SVDSuperimposer
 from mutate_sequence import mutate_sequence
-import pdb
+
+
 # Internal import (7716).
 
 ##### flags #####
@@ -208,7 +210,7 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
       pickle.dump(new_feature_dict, f, protocol=4)
     # Run the model.
     for model_name, model_runner in model_runners.items():
-      logging.info('Running model %s', model_name)
+      #logging.info('Running model %s', model_name)
       processed_feature_dict = model_runner.process_features(
           new_feature_dict, random_seed=random_seed)
 

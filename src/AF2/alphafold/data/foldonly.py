@@ -34,8 +34,8 @@ TEMPLATE_FEATURES = {
       'template_aatype': np.float32,
       'template_all_atom_masks': np.float32,
       'template_all_atom_positions': np.float32,
-      'template_domain_names': np.object,
-      'template_sequence': np.object,
+      'template_domain_names': object,
+      'template_sequence': object,
       'template_sum_probs': np.float32}
 
 def make_sequence_features(
@@ -94,7 +94,7 @@ class FoldDataPipeline:
     if pdb70_database_path and template_featurizer:
       self.template_featurizer = template_featurizer
 
-  def process(self, input_fasta_path: str, input_msas: list, 
+  def process(self, input_fasta_path: str, input_msas: list,
               msa_output_dir: str, template_search: Optional[str]) -> FeatureDict:
     """Runs alignment tools on the input sequence and creates features."""
     with open(input_fasta_path) as f:
@@ -111,8 +111,8 @@ class FoldDataPipeline:
     parsed_delmat = []
     for custom_msa in input_msas:
       msa = ''.join([line for line in open(custom_msa)])
-      if custom_msa[-3:] == 'sto': 
-        parsed_msa, parsed_deletion_matrix, _ = parsers.parse_stockholm(msa) 
+      if custom_msa[-3:] == 'sto':
+        parsed_msa, parsed_deletion_matrix, _ = parsers.parse_stockholm(msa)
       elif custom_msa[-3:] == 'a3m':
         parsed_msa, parsed_deletion_matrix = parsers.parse_a3m(msa)
       else: raise TypeError('Unknown format for input MSA, please make sure '

@@ -14,7 +14,7 @@
 
 """A collection of JAX utility functions for use in protein folding."""
 
-import collections
+import collections.abc as collections
 import numbers
 from typing import Mapping
 

@@ -16,23 +16,16 @@ EvoBind is also available as a **Colab notebook** here: https://colab.research.g
 Before beginning the process of setting up this pipeline on your local system, make sure you have adequate computational resources. Make sure you have an **available GPU** as this will speed up the prediction process substantially compared to CPU optimization. EvoBind assumes you have NVIDIA GPUs on your system, readily available. A Linux-based system is assumed.
 
 # Setup
-All needed packages are supplied through a Singularity image.
-The only requirement for running MoLPC is therefore singularity, which can be installed by following: https://sylabs.io/guides/3.0/user-guide/quick_start.html
-\
 To setup this pipeline, clone this github repository:
 ```
 git clone https://github.com/patrickbryant1/EvoBind.git
 ```
 \
-To install Singularity3 on a Linux system, do
-```
-bash ./src/install_singularity_ubuntu.sh
-```
 Then do
 ```
 bash setup.sh
 ```
-This script fetches the [AlphaFold2 parameters](https://storage.googleapis.com/alphafold/alphafold_params_2021-07-14.tar), installs the singularity image and downloads [uniclust30_2018_08](http://wwwuser.gwdg.de/~compbiol/uniclust/2018_08/uniclust30_2018_08_hhsuite.tar.gz) which is used to generate the receptor MSA.
+This script fetches the [AlphaFold2 parameters](https://storage.googleapis.com/alphafold/alphafold_params_2021-07-14.tar), installs a conda env and downloads [uniclust30_2018_08](http://wwwuser.gwdg.de/~compbiol/uniclust/2018_08/uniclust30_2018_08_hhsuite.tar.gz) which is used to generate the receptor MSA.
 
 # Design binders
 To design binders the following needs to be specified: \

@@ -2,8 +2,8 @@
 
 #############PARAMETERS#############
 # Figure out dir of the script, so we can launch from anywhere
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) #From Toni Giorgino
-BASE=$SCRIPT_DIR
+#SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) #From Toni Giorgino
+BASE=.
 DATADIR=$BASE/data/test
 RECEPTORID=1ssc_receptor
 ###Receptor interface residues
@@ -18,17 +18,15 @@ PEPTIDELENGTH=11
 PEPTIDE_CM=$DATADIR/1ssc_CM.npy
 #NUMBER OF ITERATIONS
 NITER=300 #This will likely have to be modified depending on the outcome of the design
-#Path to singularity - now this is hardcoded assuming the path created from ./src/install_singularity_ubuntu.sh, if you have singularity in your path change this variable
-SINGULARITY=/opt/singularity3/bin/singularity
+
 
 #########Step1: Create MSA with HHblits#########
-SINGIMG=$BASE/src/AF2/AF_environment.sif #Sing img
 HHBLITSDB=$BASE/data/uniclust30_2018_08/uniclust30_2018_08
 #Write individual fasta files for all unique sequences
 if test -f $DATADIR/$RECEPTORID'.a3m'; then
 	echo $DATADIR/$RECEPTORID'.a3m' exists
 else
-	$SINGULARITY exec $SINGIMG hhblits -i $RECEPTORFASTA -d $HHBLITSDB -E 0.001 -all -n 2 -oa3m $DATADIR/$RECEPTORID'.a3m'
+	$BASE/hh-suite/build/bin/hhblits -i $RECEPTORFASTA -d $HHBLITSDB -E 0.001 -all -n 2 -oa3m $DATADIR/$RECEPTORID'.a3m'
 fi
 #MSA
 MSA=$DATADIR/$RECEPTORID'.a3m'
@@ -43,7 +41,7 @@ MODEL_NAME='model_1' #model_1_ptm
 MSAS="$MSA" #Comma separated list of msa paths
 
 #Optimise a binder
-$SINGULARITY exec --nv --bind $BASE:$BASE $SINGIMG \
+conda activate evobind
 python3 $BASE/src/mc_design.py \
 		--receptor_fasta_path=$RECEPTORFASTA \
 		--receptor_if_residues=$RECEPTORIFRES \
