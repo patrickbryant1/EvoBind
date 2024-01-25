@@ -49,7 +49,7 @@ python3 $BASE/src/mc_design.py \
 		--peptide_length=$PEPTIDELENGTH \
 		--peptide_CM=$PEPTIDE_CM \
 		--msas=$MSAS \
-		--output_dir=$DATADIR \
+		--output_dir=$DATADIR/ \
 		--model_names=$MODEL_NAME \
 		--data_dir=$PARAM \
 		--max_recycles=$MAX_RECYCLES \

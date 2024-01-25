@@ -6,3 +6,4 @@ src/AF2/alphafold/model/__pycache__/
 src/AF2/alphafold/model/tf/__pycache__/
 data/test/unrelaxed_*
 src/AF2/params
+data/test/1ssc_receptor/features.pkl
