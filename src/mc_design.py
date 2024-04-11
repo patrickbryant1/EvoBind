@@ -376,14 +376,13 @@ def optimise_binder(
 
   #Check if a run exists
   if os.path.exists(output_dir_base+'if_dist_peptide.npy'):
-      sequence_scores['if_dist_peptide'] = [*np.load(output_dir_base+'if_dist_peptide.npy')]
-      sequence_scores['if_dist_receptor'] = [*np.load(output_dir_base+'if_dist_receptor.npy')]
-      sequence_scores['plddt'] = [*np.load(output_dir_base+'plddt.npy')]
-      sequence_scores['delta_CM'] = [*np.load(output_dir_base+'delta_CM.npy')]
-      sequence_scores['loss'] = [*np.load(output_dir_base+'loss.npy')]
-      sequence_scores['sequence'] = [*np.load(output_dir_base+'sequence.npy')]
+      df = pd.read_csv(output_dir+'metrics.csv')
+      for col in df.columns:
+          sequence_scores[col] = [*df[col].values]
       #Peptide sequence
       peptide_sequence = sequence_scores['sequence'][np.argmin(sequence_scores['loss'])]
+
+
 
 
   if predict_only==True and predict_only_sequence:
@@ -450,12 +449,9 @@ def optimise_binder(
     print(num_iter, if_dist_peptide, if_dist_receptor, plddt, delta_CM, loss, peptide_sequence)
 
     #Save
-    np.save(output_dir_base+'if_dist_peptide.npy', np.array(sequence_scores['if_dist_peptide']))
-    np.save(output_dir_base+'if_dist_receptor.npy', np.array(sequence_scores['if_dist_receptor']))
-    np.save(output_dir_base+'plddt.npy', np.array(sequence_scores['plddt']))
-    np.save(output_dir_base+'delta_CM.npy', np.array(sequence_scores['delta_CM']))
-    np.save(output_dir_base+'loss.npy', np.array(sequence_scores['loss']))
-    np.save(output_dir_base+'sequence.npy', np.array(sequence_scores['sequence']))
+    save_df = pd.DataFrame.from_dict(sequence_scores)
+    save_df.to_csv(output_dir+'metrics.csv', index=None)
+
     save_design(unrelaxed_protein, output_dir_base, str(num_iter), feature_dict['seq_length'][0])
 
 ######################MAIN###########################
