@@ -204,10 +204,7 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
     #Add features for the binder
     #Update features
     new_feature_dict = update_features(feature_dict, peptide_sequence)
-    # Write out features as a pickled dictionary.
-    features_output_path = os.path.join(output_dir, 'features.pkl')
-    with open(features_output_path, 'wb') as f:
-      pickle.dump(new_feature_dict, f, protocol=4)
+
     # Run the model.
     for model_name, model_runner in model_runners.items():
       #logging.info('Running model %s', model_name)
@@ -333,7 +330,7 @@ def optimise_binder(
     receptor_CAs: str,
     peptide_length: int,
     peptide_CM: str,
-    output_dir_base: str,
+    output_dir: str,
     data_pipeline: pipeline.DataPipeline,
     random_seed: int,
     model_runners: Optional[Dict[str, model.RunModel]],
@@ -353,7 +350,7 @@ def optimise_binder(
   6. Except the new sequence as a starting point if the if_dist is lower.
   7. Return to step 4.
   """
-  output_dir = os.path.join(output_dir_base, fasta_name)
+
   if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
@@ -375,7 +372,7 @@ def optimise_binder(
 
 
   #Check if a run exists
-  if os.path.exists(output_dir_base+'metrics.csv'):
+  if os.path.exists(output_dir+'metrics.csv'):
       df = pd.read_csv(output_dir+'metrics.csv')
       for col in df.columns:
           sequence_scores[col] = [*df[col].values]
@@ -404,7 +401,7 @@ def optimise_binder(
 
   #Save
   if predict_only==True:
-      save_design(unrelaxed_protein, output_dir_base, 'true', feature_dict['seq_length'][0])
+      save_design(unrelaxed_protein, output_dir, 'true', feature_dict['seq_length'][0])
       sys.exit()
   else:
       if len(sequence_scores['if_dist_peptide'])<1:
@@ -452,7 +449,7 @@ def optimise_binder(
     save_df = pd.DataFrame.from_dict(sequence_scores)
     save_df.to_csv(output_dir+'metrics.csv', index=None)
 
-    save_design(unrelaxed_protein, output_dir_base, str(num_iter), feature_dict['seq_length'][0])
+    save_design(unrelaxed_protein, output_dir, str(num_iter), feature_dict['seq_length'][0])
 
 ######################MAIN###########################
 def main(argv):
@@ -493,7 +490,7 @@ def main(argv):
         receptor_CAs=FLAGS.receptor_CAs,
         peptide_length=FLAGS.peptide_length,
         peptide_CM=FLAGS.peptide_CM,
-        output_dir_base=FLAGS.output_dir,
+        output_dir=FLAGS.output_dir,
         data_pipeline=data_pipeline,
         model_runners=model_runners,
         random_seed=random_seed,
