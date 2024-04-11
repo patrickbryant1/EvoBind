@@ -375,7 +375,7 @@ def optimise_binder(
 
 
   #Check if a run exists
-  if os.path.exists(output_dir_base+'if_dist_peptide.npy'):
+  if os.path.exists(output_dir_base+'metrics.csv'):
       df = pd.read_csv(output_dir+'metrics.csv')
       for col in df.columns:
           sequence_scores[col] = [*df[col].values]
