@@ -1748,6 +1748,11 @@ class EmbeddingsAndEvoformer(hk.Module):
       # Add one-hot-encoded clipped residue distances to the pair activations.
       pos = batch['residue_index']
       offset = pos[:, None] - pos[None, :]
+
+      #Add a cyclic offset to the peptide
+      if c.cyclic_offset:
+          offset=batch['cyclic_offset']
+
       rel_pos = jax.nn.one_hot(
           jnp.clip(
               offset + c.max_relative_feature,

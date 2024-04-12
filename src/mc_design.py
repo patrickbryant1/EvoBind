@@ -42,6 +42,7 @@ from alphafold.model import data
 from alphafold.model import config
 from alphafold.model import model
 import numpy as np
+import pandas as pd
 import jax
 from jax import numpy as jnp
 from jax import grad, value_and_grad
@@ -102,6 +103,8 @@ flags.DEFINE_bool('plDDT_only', None,
 flags.DEFINE_string('peptide_sequence', None,
     'Only predict using this peptide sequence, do not optimise.')
 
+flags.DEFINE_integer('cyclic_offset', None,
+    'Use a cyclic offset for the peptide (1).')
 
 ##### databases flags #####
 flags.DEFINE_string('data_dir', None,
@@ -210,6 +213,13 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
       #logging.info('Running model %s', model_name)
       processed_feature_dict = model_runner.process_features(
           new_feature_dict, random_seed=random_seed)
+
+      if FLAGS.cyclic_offset:
+          pos = new_feature_dict['residue_index']
+          cyclic_offset_array = pos[:, None] - pos[None, :]
+          peptide_cyclic_offset_array = feature_dict['peptide_cyclic_offset_array']
+          cyclic_offset_array[-len(peptide_cyclic_offset_array):,-len(peptide_cyclic_offset_array):]=peptide_cyclic_offset_array
+          processed_feature_dict['cyclic_offset']=np.expand_dims(cyclic_offset_array,axis=0)
 
       t_0 = time.time()
       prediction_result = model_runner.predict(processed_feature_dict)
@@ -367,6 +377,18 @@ def optimise_binder(
   #Initialize weights - these are the amino acid probabilities
   #Also returns the peptide_sequence corresponding to the weights
   seq_weights, peptide_sequence = initialize_weights(peptide_length)
+
+  #Add cyclic
+  if FLAGS.cyclic_offset:
+      peptide_length = len(peptide_sequence)
+      cyclic_offset_array = np.zeros((peptide_length, peptide_length))
+      cyc_row = np.arange(0,-peptide_length,-1)
+      pc = int(np.round(peptide_length/2)) #Get centre
+      cyc_row[pc+1:]=np.arange(len(cyc_row[pc+1:]),0,-1)
+      for i in range(len(cyclic_offset_array)):
+          cyclic_offset_array[i]=np.roll(cyc_row,i)
+      feature_dict['peptide_cyclic_offset_array']=cyclic_offset_array
+
   ####Run the directed evolution####
   sequence_scores = {'if_dist_peptide':[], 'if_dist_receptor':[],'plddt':[], 'delta_CM':[], 'loss':[],'sequence':[]}
 
@@ -465,9 +487,11 @@ def main(argv):
   for model_name in FLAGS.model_names:
 
     model_config = config.model_config(model_name)
+    if FLAGS.cyclic_offset:
+        model_config.model.embeddings_and_evoformer.cyclic_offset=True
     model_config.data.eval.num_ensemble = num_ensemble
-    model_config.data.common.num_recycle = FLAGS.max_recycles           ##### NEW!
-    model_config.model.num_recycle = FLAGS.max_recycles                 ##### NEW!
+    model_config.data.common.num_recycle = FLAGS.max_recycles
+    model_config.model.num_recycle = FLAGS.max_recycles
     model_params = data.get_model_haiku_params(
           model_name=model_name, data_dir=FLAGS.data_dir)
     model_runner = model.RunModel(model_config, model_params)
