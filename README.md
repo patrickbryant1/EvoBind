@@ -37,6 +37,9 @@ To design binders the following needs to be specified: \
 **Peptide length** \
 **Peptide centre of mass relative to the receptor CAs**
 
+## Cyclic design
+If you want to design a cyclic peptide, add the flag --cyclic_offset=1 in the design script when calling mc_design.py. Based on [cyclic offset](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9980166/).
+
 A test case is provided in **design_local.sh**. \
 This script can be run by simply doing:
 ```
