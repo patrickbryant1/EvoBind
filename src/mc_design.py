@@ -489,6 +489,8 @@ def main(argv):
     model_config = config.model_config(model_name)
     if FLAGS.cyclic_offset:
         model_config.model.embeddings_and_evoformer.cyclic_offset=True
+    else:
+        model_config.model.embeddings_and_evoformer.cyclic_offset=None
     model_config.data.eval.num_ensemble = num_ensemble
     model_config.data.common.num_recycle = FLAGS.max_recycles
     model_config.model.num_recycle = FLAGS.max_recycles
