@@ -389,6 +389,7 @@ def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs, re
     model_config.data.eval.num_ensemble = num_ensemble
     model_config.data.common.num_recycle = max_recycles
     model_config.model.num_recycle = max_recycles
+    model_config.model.embeddings_and_evoformer.cyclic_offset=None
     model_params = data.get_model_haiku_params(
           model_name=model_name, data_dir=datadir)
     model_runner = model.RunModel(model_config, model_params)
