@@ -63,14 +63,8 @@ flags.DEFINE_string('receptor_fasta_path', None,
 flags.DEFINE_string('receptor_if_residues', None,
     'Path to numpy array with receptor interface residues.')
 
-flags.DEFINE_string('receptor_CAs', None,
-    'Path to numpy array with receptor interface residues.')
-
 flags.DEFINE_integer('peptide_length', None,
     'Length of peptide binder.')
-
-flags.DEFINE_string('peptide_CM', None,
-    'Required centre of mass for peptide to be designed.')
 
 flags.DEFINE_list('model_names', None,
     'Comma separated list of different MSA sampling schemes to use; '
@@ -96,9 +90,6 @@ flags.DEFINE_integer('num_iterations', None,
 
 flags.DEFINE_bool('predict_only', None,
     'Only predict, do not optimise.')
-
-flags.DEFINE_bool('plDDT_only', None,
-    'Use plDDT as the only loss.')
 
 flags.DEFINE_string('peptide_sequence', None,
     'Only predict using this peptide sequence, do not optimise.')
@@ -199,7 +190,7 @@ def update_features(feature_dict, peptide_sequence):
 
 
 def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
-                     random_seed, receptor_if_residues, receptor_CAs, peptide_CM,  predict_only):
+                     random_seed, receptor_if_residues, predict_only):
     '''Predict and calculate loss
     '''
 
@@ -235,7 +226,7 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
 
     #If  predict_only - return unrelaxed_protein
     if predict_only==True:
-        return 0, 0 ,0 , 0, unrelaxed_protein
+        return 0, 0, unrelaxed_protein
     else:
         protein_resno, protein_atoms, protein_atom_coords = protein.get_coords(unrelaxed_protein)
         peptide_length = len(peptide_sequence)
@@ -269,29 +260,11 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
 
         #Get the closest atom-atom distances across the receptor interface residues.
         closest_dists_peptide = contact_dists[np.arange(contact_dists.shape[0]),np.argmin(contact_dists,axis=1)]
-        closest_dists_receptor = contact_dists[np.argmin(contact_dists,axis=0),np.arange(contact_dists.shape[1])]
 
         #Get the peptide plDDT
         peptide_plDDT = plddt[-peptide_length:]
 
-        #Superpose the receptor CAs and compare the centre of mass
-        sup = SVDSuperimposer()
-
-        #Get the CAs for the receptor and peptide: order N, CA
-        pred_receptor_CAs, pred_peptide_CAs = [], []
-        for resno in  np.unique(receptor_resno):
-            pred_receptor_CAs.append(np.argwhere(receptor_resno==resno)[1][0])
-        for resno in  np.unique(peptide_resno):
-            pred_peptide_CAs.append(np.argwhere(peptide_resno==resno)[1][0])
-        sup.set(receptor_CAs, receptor_coords[pred_receptor_CAs]) #(reference_coords, coords)
-        sup.run()
-        rot, tran = sup.get_rotran()
-        #Rotate the peptide coords to match the centre of mass for the native comparison
-        rotated_coords = np.dot(peptide_coords[pred_peptide_CAs], rot) + tran
-        rotated_CM =  np.sum(rotated_coords,axis=0)/(rotated_coords.shape[0])
-        delta_CM = np.sqrt(np.sum(np.square(peptide_CM-rotated_CM)))
-
-        return closest_dists_peptide.mean(), closest_dists_receptor.mean(), peptide_plDDT.mean(), delta_CM, unrelaxed_protein
+        return closest_dists_peptide.mean(), peptide_plDDT.mean(), unrelaxed_protein
 
 def parse_atm_record(line):
     '''Get the atm record
@@ -337,17 +310,14 @@ def optimise_binder(
     fasta_path: str,
     fasta_name: str,
     receptor_if_residues: str,
-    receptor_CAs: str,
     peptide_length: int,
-    peptide_CM: str,
     output_dir: str,
     data_pipeline: pipeline.DataPipeline,
     random_seed: int,
     model_runners: Optional[Dict[str, model.RunModel]],
     num_iterations: int,
     predict_only: bool,
-    predict_only_sequence: str,
-    plDDT_only: bool):
+    predict_only_sequence: str):
 
   """
   1. Initialize an array with rabdomly distributed sequence probabilities: initialize_sequence
@@ -361,8 +331,6 @@ def optimise_binder(
   7. Return to step 4.
   """
 
-  if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
 
   # Get features.
   feature_dict = data_pipeline.process(
@@ -373,6 +341,12 @@ def optimise_binder(
 
 
 
+  #Load target residues
+  try:
+    receptor_if_residues = np.load(receptor_if_residues)
+  except:
+    print('No target residues provided. Designing towards entire receptor sequence...')
+    receptor_if_residues = np.arange(feature_dict['aatype'].shape[0])
 
   #Initialize weights - these are the amino acid probabilities
   #Also returns the peptide_sequence corresponding to the weights
@@ -390,8 +364,7 @@ def optimise_binder(
       feature_dict['peptide_cyclic_offset_array']=cyclic_offset_array
 
   ####Run the directed evolution####
-  sequence_scores = {'if_dist_peptide':[], 'if_dist_receptor':[],'plddt':[], 'delta_CM':[], 'loss':[],'sequence':[]}
-
+  sequence_scores = {'iteration':[], 'if_dist_peptide':[], 'plddt':[], 'loss':[], 'sequence':[]}
 
   #Check if a run exists
   if os.path.exists(output_dir+'metrics.csv'):
@@ -403,17 +376,9 @@ def optimise_binder(
 
 
 
-
+  #Predict only
   if predict_only==True and predict_only_sequence:
       peptide_sequence = predict_only_sequence
-      receptor_CAs, peptide_CM, receptor_if_residues = [],[],[]
-  else:
-      #Get the receptor CAs
-      receptor_CAs = np.load(receptor_CAs)
-      #Get the peptide centre of mass
-      peptide_CM = np.load(peptide_CM)
-      #Target residues
-      receptor_if_residues = np.load(receptor_if_residues)
 
 
   if len(sequence_scores['if_dist_peptide'])<1:
@@ -445,27 +410,23 @@ def optimise_binder(
     #Mutate sequence
     new_sequence = mutate_sequence(peptide_sequence, sequence_scores)
     #Predict and get loss
-    if_dist_peptide, if_dist_receptor, plddt, delta_CM, unrelaxed_protein = predict_function(new_sequence, feature_dict, output_dir, model_runners,
-                                                                    random_seed, receptor_if_residues, receptor_CAs, peptide_CM, predict_only)
+    if_dist_peptide, plddt, unrelaxed_protein = predict_function(new_sequence, feature_dict, output_dir, model_runners,
+                                                                    random_seed, receptor_if_residues, predict_only)
 
     #Check if the loss improved
-    if plDDT_only==True:
-        loss = 1/plddt
-    else:
-        loss = (if_dist_peptide+if_dist_receptor)/2*1/plddt*delta_CM
+    loss = if_dist_peptide*1/plddt
     if loss<min(sequence_scores['loss']):
         #Create new best seq
         peptide_sequence = new_sequence
 
     #Save loss and weights
+    sequence_scores['iteration'].append(num_iter)
     sequence_scores['if_dist_peptide'].append(if_dist_peptide)
-    sequence_scores['if_dist_receptor'].append(if_dist_receptor)
     sequence_scores['plddt'].append(plddt)
-    sequence_scores['delta_CM'].append(delta_CM)
     sequence_scores['loss'].append(loss)
     sequence_scores['sequence'].append(new_sequence)
 
-    print(num_iter, if_dist_peptide, if_dist_receptor, plddt, delta_CM, loss, peptide_sequence)
+    print(num_iter, if_dist_peptide, plddt, loss, peptide_sequence)
 
     #Save
     save_df = pd.DataFrame.from_dict(sequence_scores)
