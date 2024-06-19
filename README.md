@@ -6,14 +6,13 @@ EvoBind2 designs novel peptide binders based **only on a protein target sequence
 \
 EvoBind2 accounts for adaptation of the receptor interface structure to the peptide design during optimisation. This consideration of flexibility is crucial for binding.
 
-![alt-text-1](./linear.gif "Linear") ![alt-text-2](cyclic.gif "Cyclic")
+<img src="linear.gif" width="425"/> <img src="cyclic.gif" width="425"/> 
 
 
 EvoBind2 is based on AlphaFold2, which is available under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0) and so is EvoBind2, which is a derivative thereof.  \
 The AlphaFold2 parameters are made available under the terms of the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode) and have not been modified.
 \
 **You may not use these files except in compliance with the licenses.**
-\
 
 # Colab notebook
 https://colab.research.google.com/github/patrickbryant1/EvoBind/blob/master/EvoBind.ipynb
@@ -52,7 +51,7 @@ bash design_local.sh
 
 \
 If you use EvoBind in your research, please cite
-\
+
 1. Bryant P, Elofsson A. EvoBind: in silico directed evolution of peptide binders with AlphaFold. bioRxiv. 2022. p. 2022.07.23.501214. doi:10.1101/2022.07.23.501214
 \
 [EvoBind (v1) is available here](https://github.com/patrickbryant1/EvoBind/releases/tag/v1)
