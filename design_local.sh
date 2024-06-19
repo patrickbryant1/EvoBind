@@ -44,4 +44,4 @@ python3 $BASE/src/mc_design.py \
 --max_recycles=$MAX_RECYCLES \
 --num_iterations=$NITER \
 --predict_only=False \
---cyclic_offset=1
+#--cyclic_offset=1
