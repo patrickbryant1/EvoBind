@@ -60,8 +60,8 @@ flags.DEFINE_string('receptor_fasta_path', None,
     'basename is used to name the output directories for '
     'each prediction.')
 
-flags.DEFINE_string('receptor_if_residues', None,
-    'Path to numpy array with receptor interface residues.')
+flags.DEFINE_list('receptor_if_residues', None,
+    'Comma separated list of receptor interface residues (start at zero).')
 
 flags.DEFINE_integer('peptide_length', None,
     'Length of peptide binder.')
@@ -325,9 +325,8 @@ def optimise_binder(
   2. Make all input features to AlphaFold: update_features
   3. Predict the structure: model_runner.predict(processed_feature_dict)
   4. Mutate the sequence.
-  5. Score the current peptide based on the distance from the peptide atoms to the interface, the
-  inteface to the peptide atoms, the centre of mass of the peptide and the plDDT.
-  6. Except the new sequence as a starting point if the if_dist is lower.
+  5. Score the current peptide based on the distance from the peptide atoms to the interface and the peptide plDDT (loss).
+  6. Accept the new sequence as a starting point if the loss is lower.
   7. Return to step 4.
   """
 
@@ -342,9 +341,10 @@ def optimise_binder(
 
 
   #Load target residues
-  try:
-    receptor_if_residues = np.load(receptor_if_residues)
-  except:
+
+  if receptor_if_residues:
+    receptor_if_residues = np.array(receptor_if_residues, dtype=int)
+  else:
     print('No target residues provided. Designing towards entire receptor sequence...')
     receptor_if_residues = np.arange(feature_dict['aatype'].shape[0])
 
@@ -354,7 +354,6 @@ def optimise_binder(
 
   #Add cyclic
   if FLAGS.cyclic_offset:
-      peptide_length = len(peptide_sequence)
       cyclic_offset_array = np.zeros((peptide_length, peptide_length))
       cyc_row = np.arange(0,-peptide_length,-1)
       pc = int(np.round(peptide_length/2)) #Get centre
@@ -375,38 +374,33 @@ def optimise_binder(
       peptide_sequence = sequence_scores['sequence'][np.argmin(sequence_scores['loss'])]
 
 
-
   #Predict only
   if predict_only==True and predict_only_sequence:
       peptide_sequence = predict_only_sequence
 
-
   if len(sequence_scores['if_dist_peptide'])<1:
       #Get an initial estimate
-      if_dist_peptide, if_dist_receptor, plddt, delta_CM, unrelaxed_protein = predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
-                                                                                    random_seed, receptor_if_residues, receptor_CAs, peptide_CM, predict_only)
+      if_dist_peptide, plddt, unrelaxed_protein = predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
+                                                                   random_seed, receptor_if_residues, predict_only)
+
+      sequence_scores['iteration'].append('init')
+      sequence_scores['if_dist_peptide'].append(if_dist_peptide)
+      sequence_scores['plddt'].append(plddt)
+      loss = if_dist_peptide*1/plddt
+      sequence_scores['loss'].append(loss)
+      sequence_scores['sequence'].append(peptide_sequence)
+      print('init',if_dist_peptide, plddt, loss, peptide_sequence)
 
   #Save
   if predict_only==True:
       save_design(unrelaxed_protein, output_dir, 'true', feature_dict['seq_length'][0])
+      save_df = pd.DataFrame.from_dict(sequence_scores)
+      save_df.to_csv(output_dir+'metrics.csv', index=None)
       sys.exit()
-  else:
-      if len(sequence_scores['if_dist_peptide'])<1:
-          #Save
-          sequence_scores['if_dist_peptide'].append(if_dist_peptide)
-          sequence_scores['if_dist_receptor'].append(if_dist_receptor)
-          sequence_scores['plddt'].append(plddt)
-          sequence_scores['delta_CM'].append(delta_CM)
-          if plDDT_only==True:
-              loss = 1/plddt
-          else:
-              loss = (if_dist_peptide+if_dist_receptor)/2*1/plddt*delta_CM
-          sequence_scores['loss'].append(loss)
-          sequence_scores['sequence'].append(peptide_sequence)
-          print(if_dist_peptide, if_dist_receptor, plddt, delta_CM, loss, peptide_sequence)
+
 
   #Iterate
-  for num_iter in range(len(sequence_scores['if_dist_peptide'])-1, num_iterations):
+  for num_iter in range(len(sequence_scores['if_dist_peptide']), num_iterations):
     #Mutate sequence
     new_sequence = mutate_sequence(peptide_sequence, sequence_scores)
     #Predict and get loss
@@ -474,23 +468,19 @@ def main(argv):
         fasta_path=FLAGS.receptor_fasta_path,
         fasta_name=fasta_name,
         receptor_if_residues=FLAGS.receptor_if_residues,
-        receptor_CAs=FLAGS.receptor_CAs,
         peptide_length=FLAGS.peptide_length,
-        peptide_CM=FLAGS.peptide_CM,
         output_dir=FLAGS.output_dir,
         data_pipeline=data_pipeline,
         model_runners=model_runners,
         random_seed=random_seed,
         num_iterations=FLAGS.num_iterations,
         predict_only=FLAGS.predict_only,
-        predict_only_sequence=FLAGS.peptide_sequence,
-        plDDT_only=FLAGS.plDDT_only)
+        predict_only_sequence=FLAGS.peptide_sequence)
 
 
 if __name__ == '__main__':
   flags.mark_flags_as_required([
       'receptor_fasta_path',
-      'receptor_if_residues',
       'peptide_length',
       'output_dir',
       'model_names',

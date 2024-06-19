@@ -1,12 +1,9 @@
 
-
 #############PARAMETERS#############
-# Figure out dir of the script, so we can launch from anywhere
-#SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ) #From Toni Giorgino
-BASE=.
-DATADIR=$BASE/data/test
+BASE=. #Change this depending on your local path
+DATADIR=$BASE/data/test #The output (designs) will also be written here
 RECEPTORID=1ssc_receptor
-###Receptor interface residues
+###Receptor interface residues - provide with --receptor_if_residues=$RECEPTORIFRES if using
 RECEPTORIFRES="4,5,8,11,12,45,47,54,55,57,58,59,65,66,72,74,81,83,102,104,105,106,107,108,109,110,111,112"
 ####Receptor fasta sequence####
 RECEPTORFASTA=$DATADIR/$RECEPTORID'.fasta'
@@ -36,15 +33,15 @@ MODEL_NAME='model_1' #model_1_ptm
 MSAS="$MSA" #Comma separated list of msa paths
 
 #Optimise a binder
-conda activate evobind
+#conda activate evobind
 python3 $BASE/src/mc_design.py \
-		--receptor_fasta_path=$RECEPTORFASTA \
-		--receptor_if_residues=$RECEPTORIFRES \
-		--peptide_length=$PEPTIDELENGTH \
-		--msas=$MSAS \
-		--output_dir=$DATADIR/ \
-		--model_names=$MODEL_NAME \
-		--data_dir=$PARAM \
-		--max_recycles=$MAX_RECYCLES \
-		--num_iterations=$NITER \
-		--predict_only=False \
+--receptor_fasta_path=$RECEPTORFASTA \
+--peptide_length=$PEPTIDELENGTH \
+--msas=$MSAS \
+--output_dir=$DATADIR/ \
+--model_names=$MODEL_NAME \
+--data_dir=$PARAM \
+--max_recycles=$MAX_RECYCLES \
+--num_iterations=$NITER \
+--predict_only=False \
+--cyclic_offset=1
