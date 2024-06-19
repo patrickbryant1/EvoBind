@@ -8,7 +8,7 @@ EvoBind2 designs novel peptide binders based **only on a protein target sequence
 The probability of obtaining a binder with KD<μM affinity (according to SPR analysis) is 15% using only EvoBind2 and 46% if adversarial evaluation with [AlphaFold-Multimer](https://www.biorxiv.org/content/10.1101/2021.10.04.463034v2) is included.
 \
 \
-EvoBind2 accounts for adaptation of the receptor interface structure to the peptide design during optimisation. This consideration of flexibility is crucial for binding.
+EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation. This consideration of flexibility is crucial for binding.
 
 
 <p align="center">
