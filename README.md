@@ -6,7 +6,7 @@ EvoBind2 designs novel peptide binders based **only on a protein target sequence
 \
 EvoBind2 accounts for adaptation of the receptor interface structure to the peptide design during optimisation. This consideration of flexibility is crucial for binding.
 
-<img src="./cyclic.gif"/> <img src="./linear.gif"/>
+<img src="./cyclic.gif" width="50%" height="50%" /> <img src="./linear.gif" width="50%" height="50%" />
 
 EvoBind2 is based on AlphaFold2, which is available under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0) and so is EvoBind2, which is a derivative thereof.  \
 The AlphaFold2 parameters are made available under the terms of the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode) and have not been modified.
@@ -36,8 +36,9 @@ This script fetches the [AlphaFold2 parameters](https://storage.googleapis.com/a
 To design binders the following needs to be specified: \
 **Receptor fasta sequence** \
 Optional arguments:
+\
 **Peptide length** - default=10 \
-**Target residues within the raceptor sequence** - default=all \
+**Target residues within the raceptor sequence** - default=all
 
 ## Cyclic design
 If you want to design a cyclic peptide, add the flag --cyclic_offset=1 in the design script when calling mc_design.py. Based on [cyclic offset](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9980166/).
