@@ -1,8 +1,8 @@
-# EvoBind2
+# EvoBind
 **In silico directed evolution of peptide binders**
 \
 \
-EvoBind2 designs novel peptide binders based **only on a protein target sequence**. It is not necessary to specify any target residues within the protein sequence or the length of the binder (although this is possible). **Cyclic binder** design is also possible.
+EvoBind (v2) designs novel peptide binders based **only on a protein target sequence**. It is not necessary to specify any target residues within the protein sequence or the length of the binder (although this is possible). **Cyclic binder** design is also possible.
 \
 \
 The probability of obtaining a binder with KD<μM affinity (according to SPR analysis) is 15% using only EvoBind2 and 46% if adversarial evaluation with [AlphaFold-Multimer](https://www.biorxiv.org/content/10.1101/2021.10.04.463034v2) is included.
