@@ -35,7 +35,7 @@ To design binders the following needs to be specified: \
 **Receptor fasta sequence** \
 Optional arguments:
 **Peptide length** - default=10 \
-**Target residues within raceptor sequence** - default=all \
+**Target residues within the raceptor sequence** - default=all \
 
 ## Cyclic design
 If you want to design a cyclic peptide, add the flag --cyclic_offset=1 in the design script when calling mc_design.py. Based on [cyclic offset](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9980166/).

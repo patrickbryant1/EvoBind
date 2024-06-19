@@ -7,18 +7,13 @@ BASE=.
 DATADIR=$BASE/data/test
 RECEPTORID=1ssc_receptor
 ###Receptor interface residues
-RECEPTORIFRES=$DATADIR/$RECEPTORID'_target_residues.npy'
-#Receptor CAs
-RECEPTOR_CAS=$DATADIR/$RECEPTORID'_CA.npy'
+RECEPTORIFRES="4,5,8,11,12,45,47,54,55,57,58,59,65,66,72,74,81,83,102,104,105,106,107,108,109,110,111,112"
 ####Receptor fasta sequence####
 RECEPTORFASTA=$DATADIR/$RECEPTORID'.fasta'
 ###Peptide length###
-PEPTIDELENGTH=11
-###Peptide centre of mass###
-PEPTIDE_CM=$DATADIR/1ssc_CM.npy
+PEPTIDELENGTH=10
 #NUMBER OF ITERATIONS
-NITER=300 #This will likely have to be modified depending on the outcome of the design
-
+NITER=1000 #This will likely have to be modified depending on the outcome of the design
 
 #########Step1: Create MSA with HHblits#########
 HHBLITSDB=$BASE/data/uniclust30_2018_08/uniclust30_2018_08
@@ -45,9 +40,7 @@ conda activate evobind
 python3 $BASE/src/mc_design.py \
 		--receptor_fasta_path=$RECEPTORFASTA \
 		--receptor_if_residues=$RECEPTORIFRES \
-		--receptor_CAs=$RECEPTOR_CAS \
 		--peptide_length=$PEPTIDELENGTH \
-		--peptide_CM=$PEPTIDE_CM \
 		--msas=$MSAS \
 		--output_dir=$DATADIR/ \
 		--model_names=$MODEL_NAME \
