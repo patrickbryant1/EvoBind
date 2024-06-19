@@ -7,8 +7,8 @@ EvoBind2 designs novel peptide binders based **only on a protein target sequence
 EvoBind2 accounts for adaptation of the receptor interface structure to the peptide design during optimisation. This consideration of flexibility is crucial for binding.
 
 <p float="left">
-  <img src="/lienar.gif" width="100" />
-  <img src="/cyclic.gif" width="100" />
+  <img src="./linear.gif" width="100" />
+  <img src="./cyclic.gif" width="100" />
 </p>
 
 EvoBind2 is based on AlphaFold2, which is available under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0) and so is EvoBind2, which is a derivative thereof.  \
