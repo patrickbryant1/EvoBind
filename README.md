@@ -8,9 +8,9 @@ EvoBind2 accounts for adaptation of the receptor interface structure to the pept
 
 
 <p align="center">
-  <img alt="Light" src="./linear.gif" width="45%">
+  <img alt="Linear" src="./linear.gif" width="45%">
 &nbsp; &nbsp; &nbsp; &nbsp;
-  <img alt="Dark" src="./cyclic.gif" width="45%">
+  <img alt="Cyclic" src="./cyclic.gif" width="45%">
 </p>
 
 
