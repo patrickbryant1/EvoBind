@@ -5,7 +5,7 @@
 EvoBind (v2) designs novel peptide binders based **only on a protein target sequence**. It is not necessary to specify any target residues within the protein sequence or the length of the binder (although this is possible). **Cyclic binder** design is also possible.
 \
 \
-The probability of obtaining a binder with Kd≤μM affinity (according to SPR analysis) is 15% using only EvoBind2 and 46% if adversarial evaluation with [AlphaFold-Multimer](https://www.biorxiv.org/content/10.1101/2021.10.04.463034v2) is included.
+The probability of obtaining a binder with Kd≤μM affinity (according to SPR analysis) is 15% using only EvoBind2 and 46% if adversarial evaluation with [AlphaFold-Multimer](https://www.biorxiv.org/content/10.1101/2021.10.04.463034v2) is included. [Read more about it here](https://www.biorxiv.org/content/10.1101/2024.06.20.599739v1)
 \
 \
 EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation. This consideration of flexibility is crucial for binding.
@@ -60,6 +60,7 @@ bash design_local.sh
 # Citation
 If you use EvoBind in your research, please cite
 
-1. Bryant P, Elofsson A. EvoBind: in silico directed evolution of peptide binders with AlphaFold. bioRxiv. 2022. p. 2022.07.23.501214. doi:10.1101/2022.07.23.501214
+1. Li Q, Vlachos E.N., Bryant P. Design of linear and cyclic peptide binders of different lengths only from a protein target sequence. bioRxiv. 2024. p. 2024.06.20.599739. doi:10.1101/2024.06.20.599739
+2. Bryant P, Elofsson A. EvoBind: in silico directed evolution of peptide binders with AlphaFold. bioRxiv. 2022. p. 2022.07.23.501214. doi:10.1101/2022.07.23.501214
 \
 [EvoBind (v1) is available here](https://github.com/patrickbryant1/EvoBind/releases/tag/v1)
