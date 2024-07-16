@@ -64,3 +64,8 @@ If you use EvoBind in your research, please cite
 2. Bryant P, Elofsson A. EvoBind: in silico directed evolution of peptide binders with AlphaFold. bioRxiv. 2022. p. 2022.07.23.501214. doi:10.1101/2022.07.23.501214
 \
 [EvoBind (v1) is available here](https://github.com/patrickbryant1/EvoBind/releases/tag/v1)
+
+
+# Colab
+It is possible to run EvoBind2 online in the [colab here](https://colab.research.google.com/github/patrickbryant1/EvoBind/blob/master/EvoBind.ipynb) \
+Set TARGET_RESIDUES to all residues in your protein target to obtain an untargeted design protocol.
