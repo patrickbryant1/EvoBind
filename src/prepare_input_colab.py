@@ -129,7 +129,7 @@ def write_pdb(data, chain_name, outname):
             x,y,z, str(record['occ']), str(record['B']), record['atm_name'][0])
             file.write(line+'\n')
 
-def prepare_input(pdbname, receptor_chain, target_residues, COM, outdir):
+def prepare_input(pdbname, receptor_chain, target_residues, outdir):
     '''Prepare input
     '''
 
