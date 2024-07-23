@@ -324,17 +324,13 @@ def optimise_binder(
       #Save the starting point
       save_design(unrelaxed_protein, output_dir, 'start', feature_dict['seq_length'][0])
 
-  #Save
-  if len(sequence_scores['if_dist_peptide'])<1:
-      #Save
+      sequence_scores['iteration'].append('init')
       sequence_scores['if_dist_peptide'].append(if_dist_peptide)
-      sequence_scores['if_dist_receptor'].append(if_dist_receptor)
       sequence_scores['plddt'].append(plddt)
-      sequence_scores['delta_CM'].append(delta_CM)
-      loss = (if_dist_peptide+if_dist_receptor)/2*1/plddt*delta_CM
+      loss = if_dist_peptide*1/plddt
       sequence_scores['loss'].append(loss)
       sequence_scores['sequence'].append(peptide_sequence)
-      print(if_dist_peptide, if_dist_receptor, plddt, delta_CM, loss, peptide_sequence)
+      print('init',if_dist_peptide, plddt, loss, peptide_sequence)
 
   #Iterate
   for num_iter in range(len(sequence_scores['if_dist_peptide']), num_iterations):
