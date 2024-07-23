@@ -368,8 +368,8 @@ def optimise_binder(
 
 ######################MAIN###########################
 def main(receptor_fasta_path, fasta_name, receptor_if_residues,
-        receptor_CAs, receptor_MSA, peptide_length,
-        peptide_CM, output_dir, num_iterations,
+        receptor_MSA, peptide_length,
+        output_dir, num_iterations,
         model_names, max_recycles, datadir,
         cyclic_offset=None,
         start_sequence=''):
