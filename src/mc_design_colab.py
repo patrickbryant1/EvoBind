@@ -294,7 +294,7 @@ def optimise_binder(
       peptide_sequence = start_sequence
 
   #Add cyclic
-  if FLAGS.cyclic_offset:
+  if cyclic_offset:
       cyclic_offset_array = np.zeros((peptide_length, peptide_length))
       cyc_row = np.arange(0,-peptide_length,-1)
       pc = int(np.round(peptide_length/2)) #Get centre
@@ -394,7 +394,6 @@ def main(receptor_fasta_path, fasta_name, receptor_if_residues,
 
 
   random_seed = random.randrange(sys.maxsize)
-  logging.info('Using random seed %d for the data pipeline', random_seed)
   data_pipeline = foldonly.FoldDataPipeline()
 
   # Predict structure for each of the sequences.
