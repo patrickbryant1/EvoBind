@@ -135,8 +135,9 @@ def update_features(feature_dict, peptide_sequence):
     return new_feature_dict
 
 
-def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
-                     random_seed, receptor_if_residues, receptor_CAs, peptide_CM):
+def predict_function(peptide_sequence, feature_dict, output_dir,
+                    model_runners, random_seed, receptor_if_residues,
+                    cyclic_offset=None):
     '''Predict and calculate loss
     '''
 
@@ -144,15 +145,18 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
     #Add features for the binder
     #Update features
     new_feature_dict = update_features(feature_dict, peptide_sequence)
-    # Write out features as a pickled dictionary.
-    features_output_path = os.path.join(output_dir, 'features.pkl')
-    with open(features_output_path, 'wb') as f:
-      pickle.dump(new_feature_dict, f, protocol=4)
+
     # Run the model.
     for model_name, model_runner in model_runners.items():
-      logging.info('Running model %s', model_name)
       processed_feature_dict = model_runner.process_features(
           new_feature_dict, random_seed=random_seed)
+
+      if cyclic_offset:
+          pos = new_feature_dict['residue_index']
+          cyclic_offset_array = pos[:, None] - pos[None, :]
+          peptide_cyclic_offset_array = feature_dict['peptide_cyclic_offset_array']
+          cyclic_offset_array[-len(peptide_cyclic_offset_array):,-len(peptide_cyclic_offset_array):]=peptide_cyclic_offset_array
+          processed_feature_dict['cyclic_offset']=np.expand_dims(cyclic_offset_array,axis=0)
 
       t_0 = time.time()
       prediction_result = model_runner.predict(processed_feature_dict)
@@ -165,6 +169,7 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
     #Get the protein
     plddt_b_factors = np.repeat(plddt[:, None], residue_constants.atom_type_num, axis=-1)
     unrelaxed_protein = protein.from_prediction(features=processed_feature_dict,result=prediction_result,b_factors=plddt_b_factors)
+
     protein_resno, protein_atoms, protein_atom_coords = protein.get_coords(unrelaxed_protein)
     peptide_length = len(peptide_sequence)
     #Get residue index
@@ -197,31 +202,12 @@ def predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
 
     #Get the closest atom-atom distances across the receptor interface residues.
     closest_dists_peptide = contact_dists[np.arange(contact_dists.shape[0]),np.argmin(contact_dists,axis=1)]
-    closest_dists_receptor = contact_dists[np.argmin(contact_dists,axis=0),np.arange(contact_dists.shape[1])]
 
     #Get the peptide plDDT
     peptide_plDDT = plddt[-peptide_length:]
 
-    #Superpose the receptor CAs and compare the centre of mass
-    sup = SVDSuperimposer()
+    return closest_dists_peptide.mean(), peptide_plDDT.mean(), unrelaxed_protein
 
-    #Get the CAs for the receptor and peptide: order N, CA
-    pred_receptor_CAs, pred_peptide_CAs = [], []
-    for resno in np.unique(receptor_resno):
-        pred_receptor_CAs.append(np.argwhere(receptor_resno==resno)[1][0])
-    for resno in np.unique(peptide_resno):
-        pred_peptide_CAs.append(np.argwhere(peptide_resno==resno)[1][0])
-    #print('Checking SVDSuperimposer...')
-    #print(receptor_CAs, receptor_coords[pred_receptor_CAs])
-    sup.set(receptor_CAs, receptor_coords[pred_receptor_CAs]) #(reference_coords, coords)
-    sup.run()
-    rot, tran = sup.get_rotran()
-    #Rotate the peptide coords to match the centre of mass for the native comparison
-    rotated_coords = np.dot(peptide_coords[pred_peptide_CAs], rot) + tran
-    rotated_CM =  np.sum(rotated_coords,axis=0)/(rotated_coords.shape[0])
-    delta_CM = np.sqrt(np.sum(np.square(peptide_CM-rotated_CM)))
-
-    return closest_dists_peptide.mean(), closest_dists_receptor.mean(), peptide_plDDT.mean(), delta_CM, unrelaxed_protein
 
 def parse_atm_record(line):
     '''Get the atm record
@@ -267,16 +253,15 @@ def optimise_binder(
     fasta_path: str,
     fasta_name: str,
     receptor_if_residues: np.array,
-    receptor_CAs: np.array,
     peptide_length: int,
-    peptide_CM: np.array,
     output_dir_base: str,
     data_pipeline: pipeline.DataPipeline,
     random_seed: int,
     model_runners: Optional[Dict[str, model.RunModel]],
     msas: list,
     num_iterations: int,
-    start_sequence: str):
+    start_sequence: str,
+    cyclic_offset):
 
   """
   1. Initialize an array with rabdomly distributed sequence probabilities: initialize_sequence
@@ -308,28 +293,36 @@ def optimise_binder(
   else:
       peptide_sequence = start_sequence
 
+  #Add cyclic
+  if FLAGS.cyclic_offset:
+      cyclic_offset_array = np.zeros((peptide_length, peptide_length))
+      cyc_row = np.arange(0,-peptide_length,-1)
+      pc = int(np.round(peptide_length/2)) #Get centre
+      cyc_row[pc+1:]=np.arange(len(cyc_row[pc+1:]),0,-1)
+      for i in range(len(cyclic_offset_array)):
+          cyclic_offset_array[i]=np.roll(cyc_row,i)
+      feature_dict['peptide_cyclic_offset_array']=cyclic_offset_array
+
+
   ####Run the directed evolution####
-  sequence_scores = {'if_dist_peptide':[], 'if_dist_receptor':[],'plddt':[], 'delta_CM':[], 'loss':[],'sequence':[]}
+  sequence_scores = {'iteration':[], 'if_dist_peptide':[], 'plddt':[], 'loss':[], 'sequence':[]}
 
   #Check if a run exists
-  if os.path.exists(output_dir_base+'if_dist_peptide.npy'):
-      sequence_scores['if_dist_peptide'] = [*np.load(output_dir_base+'if_dist_peptide.npy')]
-      sequence_scores['if_dist_receptor'] = [*np.load(output_dir_base+'if_dist_receptor.npy')]
-      sequence_scores['plddt'] = [*np.load(output_dir_base+'plddt.npy')]
-      sequence_scores['delta_CM'] = [*np.load(output_dir_base+'delta_CM.npy')]
-      sequence_scores['loss'] = [*np.load(output_dir_base+'loss.npy')]
-      sequence_scores['sequence'] = [*np.load(output_dir_base+'sequence.npy')]
+  if os.path.exists(output_dir+'metrics.csv'):
+      df = pd.read_csv(output_dir+'metrics.csv')
+      for col in df.columns:
+          sequence_scores[col] = [*df[col].values]
       #Peptide sequence
       peptide_sequence = sequence_scores['sequence'][np.argmin(sequence_scores['loss'])]
 
 
-
   if len(sequence_scores['if_dist_peptide'])<1:
       #Get an initial estimate
-      if_dist_peptide, if_dist_receptor, plddt, delta_CM, unrelaxed_protein = predict_function(peptide_sequence, feature_dict, output_dir, model_runners,
-                                                                                    random_seed, receptor_if_residues, receptor_CAs, peptide_CM)
+      if_dist_peptide, plddt, unrelaxed_protein = predict_function(peptide_sequence, feature_dict, output_dir,
+                                                                    model_runners, random_seed, receptor_if_residues,
+                                                                    cyclic_offset)
       #Save the starting point
-      save_design(unrelaxed_protein, output_dir_base, 'start', feature_dict['seq_length'][0])
+      save_design(unrelaxed_protein, output_dir, 'start', feature_dict['seq_length'][0])
 
   #Save
   if len(sequence_scores['if_dist_peptide'])<1:
@@ -344,41 +337,42 @@ def optimise_binder(
       print(if_dist_peptide, if_dist_receptor, plddt, delta_CM, loss, peptide_sequence)
 
   #Iterate
-  for num_iter in range(len(sequence_scores['if_dist_peptide'])-1, num_iterations):
+  for num_iter in range(len(sequence_scores['if_dist_peptide']), num_iterations):
     #Mutate sequence
     new_sequence = mutate_sequence(peptide_sequence, sequence_scores)
     #Predict and get loss
-    if_dist_peptide, if_dist_receptor, plddt, delta_CM, unrelaxed_protein = predict_function(new_sequence, feature_dict, output_dir, model_runners,
-                                                                    random_seed, receptor_if_residues, receptor_CAs, peptide_CM)
+    if_dist_peptide, plddt, unrelaxed_protein = predict_function(new_sequence, feature_dict, output_dir,
+                                                                model_runners, random_seed, receptor_if_residues,
+                                                                cyclic_offset)
 
     #Check if the loss improved
-    loss = (if_dist_peptide+if_dist_receptor)/2*1/plddt*delta_CM
+    loss = if_dist_peptide*1/plddt
     if loss<min(sequence_scores['loss']):
         #Create new best seq
         peptide_sequence = new_sequence
 
     #Save loss and weights
+    sequence_scores['iteration'].append(num_iter)
     sequence_scores['if_dist_peptide'].append(if_dist_peptide)
-    sequence_scores['if_dist_receptor'].append(if_dist_receptor)
     sequence_scores['plddt'].append(plddt)
-    sequence_scores['delta_CM'].append(delta_CM)
     sequence_scores['loss'].append(loss)
     sequence_scores['sequence'].append(new_sequence)
 
-    print(num_iter, if_dist_peptide, if_dist_receptor, plddt, delta_CM, loss, peptide_sequence)
+    print(num_iter, if_dist_peptide, plddt, loss, peptide_sequence)
 
     #Save
-    np.save(output_dir_base+'if_dist_peptide.npy', np.array(sequence_scores['if_dist_peptide']))
-    np.save(output_dir_base+'if_dist_receptor.npy', np.array(sequence_scores['if_dist_receptor']))
-    np.save(output_dir_base+'plddt.npy', np.array(sequence_scores['plddt']))
-    np.save(output_dir_base+'delta_CM.npy', np.array(sequence_scores['delta_CM']))
-    np.save(output_dir_base+'loss.npy', np.array(sequence_scores['loss']))
-    np.save(output_dir_base+'sequence.npy', np.array(sequence_scores['sequence']))
-    save_design(unrelaxed_protein, output_dir_base, str(num_iter), feature_dict['seq_length'][0])
+    save_df = pd.DataFrame.from_dict(sequence_scores)
+    save_df.to_csv(output_dir+'metrics.csv', index=None)
+
+    save_design(unrelaxed_protein, output_dir, str(num_iter), feature_dict['seq_length'][0])
 
 ######################MAIN###########################
-def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs, receptor_MSA, peptide_length,
-        peptide_CM, output_dir, num_iterations, model_names, max_recycles, datadir, start_sequence=''):
+def main(receptor_fasta_path, fasta_name, receptor_if_residues,
+        receptor_CAs, receptor_MSA, peptide_length,
+        peptide_CM, output_dir, num_iterations,
+        model_names, max_recycles, datadir,
+        cyclic_offset=None,
+        start_sequence=''):
 
   #Use a single ensemble
   num_ensemble = 1
@@ -389,7 +383,7 @@ def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs, re
     model_config.data.eval.num_ensemble = num_ensemble
     model_config.data.common.num_recycle = max_recycles
     model_config.model.num_recycle = max_recycles
-    model_config.model.embeddings_and_evoformer.cyclic_offset=None
+    model_config.model.embeddings_and_evoformer.cyclic_offset=cyclic_offset
     model_params = data.get_model_haiku_params(
           model_name=model_name, data_dir=datadir)
     model_runner = model.RunModel(model_config, model_params)
@@ -407,13 +401,12 @@ def main(receptor_fasta_path, fasta_name, receptor_if_residues, receptor_CAs, re
   optimise_binder(fasta_path=receptor_fasta_path,
         fasta_name=fasta_name,
         receptor_if_residues=receptor_if_residues,
-        receptor_CAs=receptor_CAs,
         peptide_length=peptide_length,
-        peptide_CM=peptide_CM,
         output_dir_base=output_dir,
         data_pipeline=data_pipeline,
         model_runners=model_runners,
         random_seed=random_seed,
         msas=[receptor_MSA],
         num_iterations=num_iterations,
-        start_sequence=start_sequence)
+        start_sequence=start_sequence,
+        cyclic_offset=cyclic_offset)
