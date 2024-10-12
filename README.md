@@ -13,7 +13,7 @@ Cyclic binder success rate = 75% \
 [Success rate = probability of obtaining a binder with Kd≤μM affinity (according to SPR analysis) from a single sequence selection.] \
 \
 [WT](https://www.rcsb.org/structure/1ssc) affinity = 35 nM \
-Best linear (from 13) = 0.19 nM \
+Best linear (from 13) = 19 nM \
 Best cyclic (from 4) = 0.26 nM \
 \
 \
