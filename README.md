@@ -17,7 +17,7 @@ Best linear (from 13) = 19 nM \
 Best cyclic (from 4) = 0.26 nM \
 \
 \
-EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation. This consideration of flexibility is crucial for binding. EvoBind is the first protocol that only relies on a protein sequence to design a binder and the only one with experimentally verified cyclic design capacity. \
+EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation. This consideration of flexibility is crucial for binding. EvoBind is the first protocol that only relies on a protein sequence to design a binder and the only one with experimentally verified cyclic design capacity. 
 
 
 <p align="center">
