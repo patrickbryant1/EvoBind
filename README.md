@@ -34,7 +34,7 @@ The AlphaFold2 parameters are made available under the terms of the [CC BY 4.0 l
 \
 **You may not use these files except in compliance with the licenses.**
 
-# If you like EvoBind - please start the repo!
+# If you like EvoBind - please star the repo!
 
 # Colab
 It is possible to run EvoBind2 online in the [Google colab here](https://colab.research.google.com/github/patrickbryant1/EvoBind/blob/master/EvoBind.ipynb)
