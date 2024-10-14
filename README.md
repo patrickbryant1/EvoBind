@@ -17,7 +17,7 @@ Best linear (from 13) = 19 nM \
 Best cyclic (from 4) = 0.26 nM \
 \
 \
-EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation. This consideration of flexibility is crucial for binding. EvoBind is the first protocol that only relies on a protein sequence to design a binder and the only one with experimentally verified cyclic design capacity. 
+EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation. This consideration of flexibility is crucial for binding. EvoBind is the first protocol that only relies on a protein sequence to design a binder and the only one with experimentally verified cyclic design capacity.
 
 
 <p align="center">
@@ -34,7 +34,7 @@ The AlphaFold2 parameters are made available under the terms of the [CC BY 4.0 l
 \
 **You may not use these files except in compliance with the licenses.**
 
-# If you like EvoBind - please start the repo!
+# If you like EvoBind - please star the repo!
 
 # Colab
 It is possible to run EvoBind2 online in the [Google colab here](https://colab.research.google.com/github/patrickbryant1/EvoBind/blob/master/EvoBind.ipynb)
