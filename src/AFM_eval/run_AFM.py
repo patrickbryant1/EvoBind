@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Search the MSA profile for a better structure."""
 import json
 import os
 import pathlib
@@ -54,11 +53,9 @@ import sys
 import os
 import pdb
 
-#JAX will preallocate 90% of currently-available GPU memory when the first JAX operation is run.
-#This prevents this
-import os
 
-parser = argparse.ArgumentParser(description = '''Visualise.''')
+parser = argparse.ArgumentParser(description = '''"""Predicts structure using AlphaFold-multimer for the given receptor+peptide complex.
+This script assumes features have already been generated.""".''')
 
 parser.add_argument('--receptor_features', nargs=1, type= str, default=sys.stdin, help = 'Path to AFM features for the recptor.')
 parser.add_argument('--data_dir', nargs=1, type= str, default=sys.stdin, help = 'Path to directory that contains the params.')
@@ -68,11 +65,6 @@ parser.add_argument('--num_recycles', nargs=1, type= int, default=sys.stdin, hel
 parser.add_argument('--cyclic_offset', nargs=1, type= int, default=sys.stdin, help = 'Use a cyclic offset for the peptide (1).')
 parser.add_argument('--use_dropout', nargs=1, type= int, default=sys.stdin, help = 'Use dropout (1) or not (0).')
 parser.add_argument('--outdir', nargs=1, type= str, default=sys.stdin, help = 'Path to output directory.')
-
-##############FUNCTIONS##############
-
-"""Predicts structure using AlphaFold-multimer for the given receptor+peptide complex.
-This script assumes features have already been generated."""
 
 
 ##########################FUNCTIONS##########################
