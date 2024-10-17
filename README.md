@@ -71,6 +71,9 @@ This script can be run by simply doing:
 bash design_local.sh
 ```
 
+# Adversarial evaluation with AlphaFold-multimer
+See **src/AFM_eval** for instructions
+
 # Citation
 If you use EvoBind in your research, please cite
 

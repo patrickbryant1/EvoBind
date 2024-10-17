@@ -8,3 +8,6 @@ data/test/unrelaxed_*
 src/AF2/params
 data/test/1ssc_receptor/features.pkl
 data/test/metrics.csv
+src/AFM_eval/data/
+data/test/AFM/*.pdb
+../../data/test/AFM/afm_evo_metrics.csv
