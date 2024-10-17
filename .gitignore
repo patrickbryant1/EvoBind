@@ -10,4 +10,11 @@ data/test/1ssc_receptor/features.pkl
 data/test/metrics.csv
 src/AFM_eval/data/
 data/test/AFM/*.pdb
-../../data/test/AFM/afm_evo_metrics.csv
+data/test/AFM/afm_evo_metrics.csv
+src/AFM_eval/alphafold/__pycache__
+src/AFM_eval/alphafold/common/__pycache__
+src/AFM_eval/alphafold/data/__pycache__
+src/AFM_eval/alphafold/data/tools/__pycache__
+src/AFM_eval/alphafold/model/__pycache__/
+src/AFM_eval/alphafold/model/geometry/__pycache__
+src/AFM_eval/alphafold/model/tf/__pycache__
