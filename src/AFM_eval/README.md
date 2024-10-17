@@ -40,6 +40,6 @@ This script will continue where it left off if it would be interrupted for some 
 score_afm_evo.sh
 ```
 \
-This script generates a csv with the AFM peptide plDDT and loss2.
+This script generates a csv with the AFM peptide plDDT and loss 2.
 We leave the interpretation of the results in combination with the EvoBind loss (loss 1)
 to the user of this software.
