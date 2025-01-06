@@ -130,7 +130,10 @@ class RunModel:
     self.init_params(feat)
     #logging.info('Running predict with shape(feat) = %s',
     #             tree.map_structure(lambda x: x.shape, feat))
-    result = self.apply(self.params, jax.random.PRNGKey(0), feat)
+    try:
+        result = self.apply(self.params, jax.random.PRNGKey(0), feat)
+    except:
+        result = self.apply(self.params, jax.random.key(0), feat)
     # This block is to ensure benchmark timings are accurate. Some blocking is
     # already happening when computing get_confidence_metrics, and this ensures
     # all outputs are blocked on.
