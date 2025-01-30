@@ -8,14 +8,6 @@
 EvoBind (v2) designs novel peptide binders based **only on a protein target sequence**. It is not necessary to specify any target residues within the protein sequence or the length of the binder (although this is possible). **Cyclic binder** design is also possible.
 \
 \
-Linear binder success rate = 46% \
-Cyclic binder success rate = 75% \
-[Success rate = probability of obtaining a binder with Kd≤μM affinity (according to SPR analysis) from a single sequence selection.] \
-\
-[WT](https://www.rcsb.org/structure/1ssc) affinity = 35 nM \
-Best linear (from 13) = 19 nM \
-Best cyclic (from 4) = 0.26 nM \
-\
 \
 EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation. This consideration of flexibility is crucial for binding. EvoBind is the first protocol that only relies on a protein sequence to design a binder and the only one with experimentally verified cyclic design capacity.
 
