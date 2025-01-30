@@ -70,7 +70,7 @@ See **src/AFM_eval** for instructions
 # Citation
 If you use EvoBind in your research, please cite
 
-1. Li Q, Vlachos E.N., Bryant P. Design of linear and cyclic peptide binders of different lengths from protein sequence information. bioRxiv. 2024. p. 2024.06.20.599739. doi:10.1101/2024.06.20.599739
-2. Bryant P, Elofsson A. EvoBind: in silico directed evolution of peptide binders with AlphaFold. bioRxiv. 2022. p. 2022.07.23.501214. doi:10.1101/2022.07.23.501214
+1. [Li Q, Vlachos E.N., Bryant P. Design of linear and cyclic peptide binders of different lengths from protein sequence information. bioRxiv. 2024. p. 2024.06.20.599739. doi:10.1101/2024.06.20.599739](https://www.biorxiv.org/content/10.1101/2024.06.20.599739v2)
+2. [Bryant P, Elofsson A. EvoBind: in silico directed evolution of peptide binders with AlphaFold. bioRxiv. 2022. p. 2022.07.23.501214. doi:10.1101/2022.07.23.501214](https://www.biorxiv.org/content/10.1101/2022.07.23.501214v1)
 \
 [EvoBind (v1) is available here](https://github.com/patrickbryant1/EvoBind/releases/tag/v1)
