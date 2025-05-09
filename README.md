@@ -74,3 +74,7 @@ If you use EvoBind in your research, please cite
 2. [Bryant P, Elofsson A. EvoBind: in silico directed evolution of peptide binders with AlphaFold. bioRxiv. 2022. p. 2022.07.23.501214. doi:10.1101/2022.07.23.501214](https://www.biorxiv.org/content/10.1101/2022.07.23.501214v1)
 \
 [EvoBind (v1) is available here](https://github.com/patrickbryant1/EvoBind/releases/tag/v1)
+
+
+# Example of studies with EvoBind
+1. [Daumiller D*, Giammarino F*, Li Q, Sonnerborg A, Cena-Diez R, Bryant P. Single-Shot Design of a Cyclic Peptide Inhibitor of HIV-1 Membrane Fusion with EvoBind. bioRxiv. 2025. p. 2025.04.30.651413. doi:10.1101/2025.04.30.651413](https://www.biorxiv.org/content/10.1101/2025.04.30.651413v1)
