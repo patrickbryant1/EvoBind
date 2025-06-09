@@ -74,4 +74,4 @@ If you use EvoBind in your research, please cite
 
 # Examples of studies with EvoBind
 1. [Daumiller D*, Giammarino F*, Li Q, Sonnerborg A, Cena-Diez R, Bryant P. Single-Shot Design of a Cyclic Peptide Inhibitor of HIV-1 Membrane Fusion with EvoBind. bioRxiv. 2025. p. 2025.04.30.651413. doi:10.1101/2025.04.30.651413](https://www.biorxiv.org/content/10.1101/2025.04.30.651413v1)
-2. [Li Q, Wiita E, Helleday T, **Bryant P.**. Blind De Novo Design of Dual Cyclic Peptide Agonists Targeting GCGR and GLP1R. bioRxiv. 2025. p. 2025.06.06.658268. doi: https://doi.org/10.1101/2025.06.06.658268](https://www.biorxiv.org/content/10.1101/2025.06.06.658268v1)
+2. [Li Q, Wiita E, Helleday T, Bryant P. Blind De Novo Design of Dual Cyclic Peptide Agonists Targeting GCGR and GLP1R. bioRxiv. 2025. p. 2025.06.06.658268. doi: https://doi.org/10.1101/2025.06.06.658268](https://www.biorxiv.org/content/10.1101/2025.06.06.658268v1)
