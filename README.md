@@ -70,7 +70,7 @@ See **src/AFM_eval** for instructions
 # Citation
 If you use EvoBind in your research, please cite
 
-[Li Q, Vlachos E.N., Bryant P. Design of linear and cyclic peptide binders of different lengths from protein sequence information. bioRxiv. 2024. p. 2024.06.20.599739. doi:10.1101/2024.06.20.599739](https://www.biorxiv.org/content/10.1101/2024.06.20.599739v2)
+[Li, Q., Vlachos, E.N. & Bryant, P. Design of linear and cyclic peptide binders from protein sequence information. Commun Chem 8, 211 (2025). https://doi.org/10.1038/s42004-025-01601-3](https://www.nature.com/articles/s42004-025-01601-3)
 
 # Examples of studies with EvoBind
 1. [Daumiller D*, Giammarino F*, Li Q, Sonnerborg A, Cena-Diez R, Bryant P. Single-Shot Design of a Cyclic Peptide Inhibitor of HIV-1 Membrane Fusion with EvoBind. bioRxiv. 2025. p. 2025.04.30.651413. doi:10.1101/2025.04.30.651413](https://www.biorxiv.org/content/10.1101/2025.04.30.651413v1)
