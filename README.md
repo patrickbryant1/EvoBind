@@ -5,7 +5,9 @@
 \
 EvoBind (v2) designs novel peptide binders based **only on a protein target sequence**. It is not necessary to specify any target residues within the protein sequence or the length of the binder (although this is possible). **Cyclic binder** design is also possible.
 \
-\[Li, Q., Vlachos, E.N. & Bryant, P. Design of linear and cyclic peptide binders from protein sequence information. Commun Chem 8, 211 (2025). https://doi.org/10.1038/s42004-025-01601-3](https://www.nature.com/articles/s42004-025-01601-3)
+\
+[Read more here](https://www.nature.com/articles/s42004-025-01601-3)
+\
 \
 EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation. This consideration of flexibility is crucial for binding. EvoBind is the first protocol that only relies on a protein sequence to design a binder and the only one with experimentally verified cyclic design capacity.
 
