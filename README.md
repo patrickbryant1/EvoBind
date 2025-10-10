@@ -1,4 +1,5 @@
 # EvoBind
+  <img alt="EB logo" src="./EB_logo.png" width="45%"> 
 **In silico directed evolution of peptide binders**
 \
 \
