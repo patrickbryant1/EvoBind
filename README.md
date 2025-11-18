@@ -22,8 +22,6 @@ EvoBind2 accounts for adaptation of the receptor interface structure to the pept
 </p>
 
 Receptor in green and peptide in blue.
-\
-\
 
 # LICENSE
 EvoBind2 is based on AlphaFold2, which is available under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).  \
@@ -96,5 +94,5 @@ If you use EvoBind in your research, please cite
 2. [Li Q, Wiita E, Helleday T, Bryant P. Blind De Novo Design of Dual Cyclic Peptide Agonists Targeting GCGR and GLP1R. bioRxiv. 2025. p. 2025.06.06.658268. doi: https://doi.org/10.1101/2025.06.06.658268](https://www.biorxiv.org/content/10.1101/2025.06.06.658268v1)
 
 # The EvoBind ecosystem
-[RareFold](https://github.com/patrickbryant1/RareFold) - design with noncanonical amino acids
+[RareFold](https://github.com/patrickbryant1/RareFold) - prediction & design with noncanonical amino acids \
 [RareFoldGPCR](https://github.com/patrickbryant1/RareFoldGPCR) - GPCR agonist design with noncanonical amino acids
