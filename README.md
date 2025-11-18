@@ -40,8 +40,7 @@ The design protocol EvoBind2 is made available under the terms of the [CC BY-NC 
 5.  [Setup](#setup)
 6.  [Design binders](#design-binders)
     * [Cyclic design](#cyclic-design)
-
-7.  [Adversarial evaluation with AlphaFold-multimer](#adversarial-evaluation-with-alphaFold-multimer)
+    * [Adversarial evaluation with AlphaFold-multimer](#adversarial-evaluation-with-alphaFold-multimer)
 8. [Citation](#citation)
 9. [Examples of studies with EvoBind](#examples-of-studies-with-evobind)
 10. [The EvoBind ecosystem](#the-evobind-ecosystem)
@@ -81,7 +80,7 @@ This script can be run by simply doing:
 bash design_local.sh
 ```
 
-# Adversarial evaluation with AlphaFold-multimer
+## Adversarial evaluation with AlphaFold-multimer
 See **src/AFM_eval** for instructions
 
 # Citation
