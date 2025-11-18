@@ -6,14 +6,13 @@
 **In silico directed evolution of peptide binders**
 \
 \
-\
 EvoBind (v2) designs novel peptide binders based **only on a protein target sequence**. It is not necessary to specify any target residues within the protein sequence or the length of the binder (although this is possible). **Cyclic binder** design is also possible.
 \
 \
 [Read more here](https://www.nature.com/articles/s42004-025-01601-3)
 \
 \
-EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation. This consideration of flexibility is crucial for binding. EvoBind is the first protocol that only relies on a protein sequence to design a binder and the only one with experimentally verified cyclic design capacity.
+EvoBind2 accounts for adaptation of the receptor interface structure to the peptide being designed during optimisation: **sequence and structure is generated simultaneously**. This consideration of flexibility is crucial for binding. EvoBind is the first protocol that only relies on a protein sequence to design a binder with experimentally verified cyclic design capacity.
 
 
 <p align="center">
