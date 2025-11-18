@@ -94,5 +94,6 @@ If you use EvoBind in your research, please cite
 2. [Li Q, Wiita E, Helleday T, Bryant P. Blind De Novo Design of Dual Cyclic Peptide Agonists Targeting GCGR and GLP1R. bioRxiv. 2025. p. 2025.06.06.658268. doi: https://doi.org/10.1101/2025.06.06.658268](https://www.biorxiv.org/content/10.1101/2025.06.06.658268v1)
 
 # The EvoBind ecosystem
+[EvoBind](https://github.com/patrickbryant1/EvoBind) - designs novel [cyclic] peptide binders based **only on a protein target sequence**. \
 [RareFold](https://github.com/patrickbryant1/RareFold) - prediction & design with noncanonical amino acids \
 [RareFoldGPCR](https://github.com/patrickbryant1/RareFoldGPCR) - GPCR agonist design with noncanonical amino acids
