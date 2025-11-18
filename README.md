@@ -1,6 +1,7 @@
 
 
-# EvoBind <img align="right" src="./EB_logo.png">
+# EvoBind
+<img align="right" src="./EB_logo.png">
 
 **In silico directed evolution of peptide binders**
 \
@@ -23,13 +24,6 @@ EvoBind2 accounts for adaptation of the receptor interface structure to the pept
 
 Receptor in green and peptide in blue.
 
-# LICENSE
-EvoBind2 is based on AlphaFold2, which is available under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).  \
-The AlphaFold2 parameters are made available under the terms of the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode) and have not been modified. \
-The design protocol EvoBind2 is made available under the terms of the [CC BY-NC 4.0 license](https://creativecommons.org/licenses/by-nc/4.0/).
-\
-**You may not use these files except in compliance with the licenses.**
-
 # If you like EvoBind - please star the repo!
 
 # Table of Contents
@@ -44,6 +38,14 @@ The design protocol EvoBind2 is made available under the terms of the [CC BY-NC 
 8. [Citation](#citation)
 9. [Examples of studies with EvoBind](#examples-of-studies-with-evobind)
 10. [The EvoBind ecosystem](#the-evobind-ecosystem)
+
+
+# LICENSE
+EvoBind2 is based on AlphaFold2, which is available under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).  \
+The AlphaFold2 parameters are made available under the terms of the [CC BY 4.0 license](https://creativecommons.org/licenses/by/4.0/legalcode) and have not been modified. \
+The design protocol EvoBind2 is made available under the terms of the [CC BY-NC 4.0 license](https://creativecommons.org/licenses/by-nc/4.0/).
+\
+**You may not use these files except in compliance with the licenses.**
 
 # Colab
 It is possible to run EvoBind2 online in the [Google colab here](https://colab.research.google.com/github/patrickbryant1/EvoBind/blob/master/EvoBind.ipynb)
