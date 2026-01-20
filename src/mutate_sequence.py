@@ -40,5 +40,3 @@ def mutate_sequence(peptide_sequence, sequence_scores):
                     continue
                 else:
                     return new_seq
-
-        seeds.append(new_seq)
