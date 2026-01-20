@@ -65,12 +65,12 @@ bash setup.sh
 This script fetches the [AlphaFold2 parameters](https://storage.googleapis.com/alphafold/alphafold_params_2021-07-14.tar), installs a conda env and downloads [uniclust30_2018_08](http://wwwuser.gwdg.de/~compbiol/uniclust/2018_08/uniclust30_2018_08_hhsuite.tar.gz) which is used to generate the receptor MSA.
 
 # Design binders
-To design binders the following needs to be specified: \
+To design binders, the following needs to be specified: \
 **Receptor fasta sequence** \
 Optional arguments:
 \
 **Peptide length** - default=10 \
-**Target residues within the raceptor sequence** - default=all
+**Target residues within the receptor sequence** - default=all
 
 ## Cyclic design
 If you want to design a cyclic peptide, add the flag --cyclic_offset=1 in the design script when calling mc_design.py. Based on [cyclic offset](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9980166/).
