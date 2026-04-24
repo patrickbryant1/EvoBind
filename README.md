@@ -6,7 +6,7 @@
 **In silico directed evolution of peptide binders**
 \
 \
-EvoBind (v2) designs novel peptide binders based **only on a protein target sequence**. It is not necessary to specify any target residues within the protein sequence or the length of the binder (although this is possible). **Cyclic binder** design is also possible.
+EvoBind (v2) designs novel **peptide binders** based **only on a protein target sequence**. It is not necessary to specify any target residues within the protein sequence or the length of the binder (although this is possible). **Cyclic binder** design is also possible.
 \
 \
 [Read more here](https://www.nature.com/articles/s42004-025-01601-3)
