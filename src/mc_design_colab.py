@@ -355,7 +355,7 @@ def optimise_binder(
     sequence_scores['loss'].append(loss)
     sequence_scores['sequence'].append(new_sequence)
 
-    print(num_iter, if_dist_peptide, plddt, loss, peptide_sequence)
+    print(num_iter, if_dist_peptide, plddt, loss, new_sequence)
 
     #Save
     save_df = pd.DataFrame.from_dict(sequence_scores)
