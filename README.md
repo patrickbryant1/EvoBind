@@ -1,4 +1,4 @@
-
+,
 
 # EvoBind
 <img align="right" src="./EB_logo.png">
@@ -96,5 +96,6 @@ Volume 246, 2026](https://www.sciencedirect.com/science/article/pii/S01663542250
 
 # The EvoBind ecosystem
 [EvoBind](https://github.com/patrickbryant1/EvoBind) - designs novel [cyclic] peptide binders based **only on a protein target sequence**. \
+[EvoBind-multimer](https://github.com/patrickbryant1/EvoBind-multimer) - designs macrocyclic molecular glues \
 [RareFold](https://github.com/patrickbryant1/RareFold) - prediction & design with noncanonical amino acids \
 [RareFoldGPCR](https://github.com/patrickbryant1/RareFoldGPCR) - GPCR agonist design with noncanonical amino acids
