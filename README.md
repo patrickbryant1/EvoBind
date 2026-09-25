@@ -1,5 +1,3 @@
-,
-
 # EvoBind
 <img align="right" src="./EB_logo.png">
 
